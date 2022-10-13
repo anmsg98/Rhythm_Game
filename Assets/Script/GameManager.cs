@@ -14,6 +14,16 @@ public class GameManager : MonoBehaviour
     }
 
     public float noteSpeed;
+    public float judgeTime;
+
+    public enum judges
+    {
+        NONE = 0,
+        BAD,
+        GOOD,
+        PERFECT,
+        MISS
+    };
     
     void Start()
     {

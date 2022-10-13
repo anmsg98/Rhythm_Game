@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Perfect Judgement
+  - Good Judgement
+  - Bad Judgement
+  - Miss Judgement
   layers:
   - Default
   - TransparentFX
