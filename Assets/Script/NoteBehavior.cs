@@ -6,7 +6,7 @@ using UnityEngine;
 public class NoteBehavior : MonoBehaviour
 {
 
-    public GameObject missJudge;
+    private GameObject missJudge;
     
     public int noteType;
     private float noteSpeed;
@@ -19,6 +19,7 @@ public class NoteBehavior : MonoBehaviour
 
     void Start()
     {
+        missJudge = GameObject.Find("Miss JudgeLine");
         noteSpeed = GameManager.instance.noteSpeed;
         detailedJudgment = GameManager.instance.judgeTime * noteSpeed * 0.001f;
         
@@ -45,8 +46,7 @@ public class NoteBehavior : MonoBehaviour
             Debug.Log(judge);
             if (judge != GameManager.judges.NONE)
             {
-                transform.position = new Vector3(-6f,10f,0f);
-                judge = GameManager.judges.NONE;
+                gameObject.SetActive(false);
             }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -80,9 +80,12 @@ public class NoteBehavior : MonoBehaviour
         {
             judge = GameManager.judges.MISS;
             Debug.Log(judge);
-            judge = GameManager.judges.NONE;
-            transform.position = new Vector3(-6f,10f,0f);
+            gameObject.SetActive(false);
         }
     }
-    
+
+    public void Initialize()
+    {
+        judge = GameManager.judges.NONE;
+    }
 }
