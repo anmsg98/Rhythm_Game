@@ -25,17 +25,18 @@ public class NoteController : MonoBehaviour
     private List<Note> notes = new List<Note>();
     private float x, z, startY = 30.0f;
     private float beatInterval = 1.0f;
+    private int count = 1;
     void Start()
     {
         noteObjectPooler = gameObject.GetComponent<ObjectPooler>();
-        notes.Add(new Note(1, 1));
-        notes.Add(new Note(2, 2));
-        notes.Add(new Note(3, 3));
-        notes.Add(new Note(4, 4));
-        notes.Add(new Note(1, 5));
-        notes.Add(new Note(2, 6));
-        notes.Add(new Note(3, 7));
-        notes.Add(new Note(4, 8));
+        for (int i = 1; i < 1000; i++)
+        {
+            if (count > 4) count = 1;
+            notes.Add(new Note(count, i));
+            count++;
+        }
+        
+       
         
         for (int i = 0; i < notes.Count; i++)
         {
