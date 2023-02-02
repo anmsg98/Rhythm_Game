@@ -54,8 +54,22 @@ public class GameManager : MonoBehaviour
     public GameObject[] trails;
     private SpriteRenderer[] trailSpriteRenderers;
 
+    private AudioSource audioSource;
+    private string music = "Please Wind";
+    
+    // 음악을 실행하는 함수
+    void MusicStart()
+    {
+        AudioClip audioClip = Resources.Load<AudioClip>("Beats/" + music);
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = audioClip;
+        audioSource.Play();
+
+    }
+    
     void Start()
     {
+        Invoke("MusicStart", 1);
         comboText = comboUI.GetComponent<TMP_Text>();
         judgeText = judgementUI.GetComponent<TMP_Text>();
         rateText = rateUI.GetComponent<TMP_Text>();

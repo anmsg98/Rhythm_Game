@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Unity.Mathematics;
+using Random = System.Random;
 
 public class NoteController : MonoBehaviour
 {
@@ -16,23 +18,23 @@ public class NoteController : MonoBehaviour
             this.noteType = noteType;
             this.order = order;
         }
-        
+
     }
 
     public GameObject[] Notes;
-
+    private WaitForSeconds _time;
     private ObjectPooler noteObjectPooler;
     private List<Note> notes = new List<Note>();
     private float x, z, startY = 30.0f;
-    private float beatInterval = 1.0f;
+    private float beatInterval = 0.15f;
     private int count = 1;
+    private Random randnum = new Random();
     void Start()
     {
         noteObjectPooler = gameObject.GetComponent<ObjectPooler>();
         for (int i = 1; i < 1000; i++)
         {
-            if (count > 4) count = 1;
-            notes.Add(new Note(count, i));
+            notes.Add(new Note(randnum.Next(1,5), i));
             count++;
         }
         
@@ -53,7 +55,10 @@ public class NoteController : MonoBehaviour
     {
         int noteTpye = note.noteType;
         int order = note.order;
-        yield return new WaitForSeconds((order * beatInterval));
+        _time = new WaitForSeconds(1f + order * beatInterval);
+
+        yield return _time;
+        
         MaKeNote(note);
     }
 
