@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using System;
+using System.Diagnostics;
+using System.Linq;
 
 public class ObjectPooler : MonoBehaviour
 {
@@ -20,6 +23,7 @@ public class ObjectPooler : MonoBehaviour
             {
                 GameObject obj = Instantiate(Notes[i]);
                 obj.SetActive(false);
+                
                 poolsOfNotes[i].Add(obj);
             }
         }
@@ -27,11 +31,11 @@ public class ObjectPooler : MonoBehaviour
 
     public GameObject getObject(int noteType)
     {
-        foreach (GameObject obj in poolsOfNotes[noteType - 1])
+        for (int i = 0; i < noteCount; i++) 
         {
-            if (!obj.activeInHierarchy)
+            if (!poolsOfNotes[noteType - 1][i].activeInHierarchy)
             {
-                return obj;
+                return poolsOfNotes[noteType - 1][i];
             }
         }
 
@@ -45,8 +49,33 @@ public class ObjectPooler : MonoBehaviour
         return null;
     }
 
+    
+    
     void Update()
     {
+        // 연타나 빠른 비트의 노트가 같은라인에 내려올때 후행 노트가 판정이 같이 처리되는 문제점 해결
+        List<List<int>> arr = new List<List<int>>();
         
+        for (int i = 0; i < Notes.Count; i++)
+        {
+            arr.Add(new List<int>()); 
+            for (int j = 0; j < noteCount; j++)
+            {
+                if (!poolsOfNotes[i][j].activeInHierarchy)
+                    arr[i].Add(9999);
+                else
+                {
+                    arr[i].Add(poolsOfNotes[i][j].GetComponent<NoteBehavior>().notePrior);
+                }
+            }
+        }
+
+        for (int i = 0; i < Notes.Count; i++)
+        {
+            int n = arr[i].Min();
+            poolsOfNotes[i][arr[i].IndexOf(n)].GetComponent<NoteBehavior>().noteJudge = true;
+        }
+
     }
 }
+ 

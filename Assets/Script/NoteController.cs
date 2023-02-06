@@ -37,6 +37,8 @@ public class NoteController : MonoBehaviour
     private float startingPoint;
     private float beatCount;
     private float beatInterval;
+
+    private List<int> orderList = new List<int>();
     
     void Start()
     {
@@ -58,13 +60,17 @@ public class NoteController : MonoBehaviour
         beatInterval = 0.125f / beatCount;
 
         string line;
+        int notetype;
+        int order;
+        
         while ((line = reader.ReadLine()) != null)
         {
-            Note note = new Note(
-                Convert.ToInt32(line.Split(' ')[0]),
-                Convert.ToInt32(line.Split(' ')[1])
-                );
+            notetype = Convert.ToInt32(line.Split(' ')[0]);
+            order = Convert.ToInt32(line.Split(' ')[1]);
+            Note note = new Note(notetype, order);
+            orderList.Add(order);
             notes.Add(note);
+            
         }
 
         for (int i = 0; i < notes.Count; i++)
@@ -88,15 +94,18 @@ public class NoteController : MonoBehaviour
         
         MaKeNote(note);
     }
+
+    private int cnt = 0;
     void MaKeNote(Note note)
     {
         GameObject obj = noteObjectPooler.getObject(note.noteType);
-        
         x = obj.transform.position.x;
         z = obj.transform.position.z;
         obj.transform.position = new Vector3(x, startY, z);
         obj.GetComponent<NoteBehavior>().Initialize();
-        obj.SetActive(true); 
+        obj.GetComponent<NoteBehavior>().notePrior = orderList[cnt];
+        obj.SetActive(true);
+        cnt += 1;
     }
 
     

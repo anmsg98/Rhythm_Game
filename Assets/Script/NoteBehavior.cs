@@ -5,17 +5,28 @@ using UnityEngine;
 
 public class NoteBehavior : MonoBehaviour
 {
-
+    public static NoteBehavior instance { get; set; }
+    
+    // Break 판정선
     private GameObject missJudge;
     
+    // 노트 타입, 노트 처리 순서, 노트 판정 가능 여부
     public int noteType;
+    public int notePrior = 0;
+    public bool noteJudge = false;
     
+    // 판정구역, 판정 세부조정
     private float judgeSection;
     private float detailedJudgment;
     
+    // 판정(1~100%), 키입력
     public GameManager.judges judge;
     private KeyCode keyCode;
 
+    private void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         missJudge = GameObject.Find("Miss JudgeLine");
@@ -42,9 +53,10 @@ public class NoteBehavior : MonoBehaviour
     {
         if (Input.GetKeyDown(keyCode))
         {
-            if (judge != GameManager.judges.NONE)
+            if (judge != GameManager.judges.NONE && noteJudge)
             {
                 GameManager.instance.ProcessJudge(judge);
+                noteJudge = false;
                 gameObject.SetActive(false);
             }
         }
@@ -103,6 +115,7 @@ public class NoteBehavior : MonoBehaviour
         {
             judge = GameManager.judges.Break;
             GameManager.instance.ProcessJudge(judge);
+            noteJudge = false;
             gameObject.SetActive(false);
         }
     }
@@ -110,5 +123,6 @@ public class NoteBehavior : MonoBehaviour
     public void Initialize()
     {
         judge = GameManager.judges.NONE;
+        
     }
 }
