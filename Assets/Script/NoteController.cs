@@ -26,7 +26,8 @@ public class NoteController : MonoBehaviour
     private WaitForSeconds _time;
     private ObjectPooler noteObjectPooler;
     private List<Note> notes = new List<Note>();
-    private float x, z, startY = 30.0f;
+    private float x, z;
+    public float startY;
     private int count = 1;
     private Random randnum = new Random();
     
@@ -40,10 +41,11 @@ public class NoteController : MonoBehaviour
 
     private List<int> orderList = new List<int>();
     
+
     void Start()
     {
         noteObjectPooler = gameObject.GetComponent<ObjectPooler>();
-
+        startY = GameManager.instance.noteSpeed * 2.6f - 4.1f;
         TextAsset textAsset = Resources.Load<TextAsset>("Beats/" + GameManager.instance.music);
         StringReader reader = new StringReader(textAsset.text);
         // 곡제목

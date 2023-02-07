@@ -289,6 +289,7 @@ MonoBehaviour:
   - {fileID: 5483605104138180910, guid: d8213b98cf1e254449414a020131a798, type: 3}
   - {fileID: 4789963093991047362, guid: 44da2745a68a86a4e99a5291839ad2de, type: 3}
   - {fileID: 6213543284194761658, guid: e50d27fb6208bda4ca3286cec95773f9, type: 3}
+  startY: 0
 --- !u!4 &87989239
 Transform:
   m_ObjectHideFlags: 0
@@ -2341,7 +2342,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 900c3859e1989d044a58a2459f61bf13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteSpeed: 20
+  noteSpeed: 15
   judgeTime: 42
   rateUI: {fileID: 1853943281}
   comboUI: {fileID: 1949125947}
@@ -2351,6 +2352,7 @@ MonoBehaviour:
   - {fileID: 1385386047}
   - {fileID: 1559928965}
   - {fileID: 1654549909}
+  audioSource: {fileID: 0}
   music: Please Wind
 --- !u!4 &1939397545
 Transform:

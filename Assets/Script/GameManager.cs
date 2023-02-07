@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] trails;
     private SpriteRenderer[] trailSpriteRenderers;
 
-    private AudioSource audioSource;
+    public AudioSource audioSource;
     public string music = "Please Wind";
     
     // 음악을 실행하는 함수
@@ -69,7 +69,8 @@ public class GameManager : MonoBehaviour
     
     void Start()
     {
-        Invoke("MusicStart", 1);
+        MusicStart();
+        //Invoke("MusicStart", 1);
         comboText = comboUI.GetComponent<TMP_Text>();
         judgeText = judgementUI.GetComponent<TMP_Text>();
         rateText = rateUI.GetComponent<TMP_Text>();
@@ -107,8 +108,6 @@ public class GameManager : MonoBehaviour
         {
             noteSpeed += 1f;
         }
-        
-        
     }
 
     public void ShineTrail(int index)

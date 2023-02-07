@@ -1,6 +1,6 @@
 Plaese Wind
 Forte Escape
-108 60 2.1
+108 60 0
 4 0
 2 16
 4 28

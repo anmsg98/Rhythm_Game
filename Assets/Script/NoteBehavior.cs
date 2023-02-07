@@ -46,7 +46,6 @@ public class NoteBehavior : MonoBehaviour
         transform.Translate(Vector3.down * GameManager.instance.noteSpeed * Time.deltaTime);
         CheckJudgeMent();
         KeyInput();
-
     }
 
     void KeyInput()
@@ -108,6 +107,7 @@ public class NoteBehavior : MonoBehaviour
             }
             else if (judgeSection < detailedJudgment)
             {
+                Debug.Log((GameManager.instance.audioSource.timeSamples / 44100f));
                 judge = GameManager.judges.MAX100;
             }
         }
