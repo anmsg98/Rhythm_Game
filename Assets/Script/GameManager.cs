@@ -69,8 +69,7 @@ public class GameManager : MonoBehaviour
     
     void Start()
     {
-        MusicStart();
-        //Invoke("MusicStart", 1);
+        Invoke("MusicStart", 2.4f);
         comboText = comboUI.GetComponent<TMP_Text>();
         judgeText = judgementUI.GetComponent<TMP_Text>();
         rateText = rateUI.GetComponent<TMP_Text>();
