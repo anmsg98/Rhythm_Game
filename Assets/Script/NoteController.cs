@@ -12,9 +12,9 @@ public class NoteController : MonoBehaviour
     class Note
     {
         public int noteType { get; set; }
-        public int order { get; set; }
+        public float order { get; set; }
 
-        public Note(int noteType, int order)
+        public Note(int noteType, float order)
         {
             this.noteType = noteType;
             this.order = order;
@@ -39,7 +39,7 @@ public class NoteController : MonoBehaviour
     private float beatCount;
     private float beatInterval;
 
-    private List<int> orderList = new List<int>();
+    private List<float> orderList = new List<float>();
     
 
     void Start()
@@ -63,12 +63,12 @@ public class NoteController : MonoBehaviour
 
         string line;
         int notetype;
-        int order;
+        float order;
         
         while ((line = reader.ReadLine()) != null)
         {
             notetype = Convert.ToInt32(line.Split(' ')[0]);
-            order = Convert.ToInt32(line.Split(' ')[1]);
+            order = Convert.ToSingle(line.Split(' ')[1]);
             Note note = new Note(notetype, order);
             orderList.Add(order);
             notes.Add(note);
@@ -89,7 +89,7 @@ public class NoteController : MonoBehaviour
     IEnumerator AwaitMakeNote(Note note)
     {
         int noteTpye = note.noteType;
-        int order = note.order;
+        float order = note.order;
         _time = new WaitForSeconds(startingPoint + order * beatInterval);
 
         yield return _time;

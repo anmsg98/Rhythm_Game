@@ -12,7 +12,7 @@ public class NoteBehavior : MonoBehaviour
     
     // 노트 타입, 노트 처리 순서, 노트 판정 가능 여부
     public int noteType;
-    public int notePrior = 0;
+    public float notePrior = 0f;
     public bool noteJudge = false;
     
     // 판정구역, 판정 세부조정

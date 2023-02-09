@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     private SpriteRenderer[] trailSpriteRenderers;
 
     public AudioSource audioSource;
-    public string music = "Please Wind";
+    public string music;
     
     // 음악을 실행하는 함수
     void MusicStart()

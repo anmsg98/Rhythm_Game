@@ -65,7 +65,7 @@ public class ObjectPooler : MonoBehaviour
                     arr[i].Add(9999);
                 else
                 {
-                    arr[i].Add(poolsOfNotes[i][j].GetComponent<NoteBehavior>().notePrior);
+                    arr[i].Add((int)poolsOfNotes[i][j].GetComponent<NoteBehavior>().notePrior);
                 }
             }
         }
