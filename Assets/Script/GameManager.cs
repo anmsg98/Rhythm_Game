@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class GameManager : MonoBehaviour
 {
@@ -57,15 +59,27 @@ public class GameManager : MonoBehaviour
     public AudioSource audioSource;
     public string music;
     
+    public VideoPlayer videoSource;
+    public RawImage videoBackGround;
+    private AudioSource colorChageSound;
+    private byte videoColor = 255;
+    public string video;
+    
     // 음악을 실행하는 함수
     void MusicStart()
     {
         AudioClip audioClip = Resources.Load<AudioClip>("Beats/" + music);
+        VideoClip videoClip = Resources.Load<VideoClip>("Video/" + video);
         audioSource = GetComponent<AudioSource>();
+        videoSource = GetComponent<VideoPlayer>();
+        
         audioSource.clip = audioClip;
-        audioSource.Play();
-
+        videoSource.clip = videoClip;
+        
+        videoSource.Play();
     }
+
+
     
     void Start()
     {
@@ -75,7 +89,7 @@ public class GameManager : MonoBehaviour
         rateText = rateUI.GetComponent<TMP_Text>();
         comboAnimator = comboUI.GetComponent<Animator>();
         judgementAnimator = judgementUI.GetComponent<Animator>();
-        
+        colorChageSound = videoBackGround.GetComponent<AudioSource>();
 
         trailSpriteRenderers = new SpriteRenderer[trails.Length];
         for (int i = 0; i < trails.Length; i++)
@@ -106,6 +120,27 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             noteSpeed += 1f;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Insert))
+        {
+            if (videoColor < 255)
+            {
+                colorChageSound.Play();
+                videoColor += 51;
+            }
+            videoBackGround.color = new Color32(videoColor, videoColor, videoColor, 255);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            if (videoColor > 0)
+            {
+                colorChageSound.Play();
+                videoColor -= 51;
+            }
+            videoBackGround.color = new Color32(videoColor, videoColor, videoColor, 255);
+            
         }
     }
 

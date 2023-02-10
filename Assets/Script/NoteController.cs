@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using Unity.Mathematics;
 using Random = System.Random;
+using UnityEngine.SceneManagement;
 
 public class NoteController : MonoBehaviour
 {
@@ -19,7 +20,6 @@ public class NoteController : MonoBehaviour
             this.noteType = noteType;
             this.order = order;
         }
-
     }
 
     public GameObject[] Notes;
@@ -74,13 +74,15 @@ public class NoteController : MonoBehaviour
             notes.Add(note);
             
         }
-
+        // 노트의 출력 시간 설정
         for (int i = 0; i < notes.Count; i++)
         {
             StartCoroutine(AwaitMakeNote(notes[i]));
         }
+        // 게임 종료 (마지막 노트 출력)
+        StartCoroutine(AwaitGameResult(notes[notes.Count - 1].order));
     }
-
+    
     void Update()
     {
         
@@ -97,6 +99,19 @@ public class NoteController : MonoBehaviour
         MaKeNote(note);
     }
 
+    IEnumerator AwaitGameResult(float order)
+    {
+        _time = new WaitForSeconds(startingPoint + order * beatInterval + 8.0f);
+
+        yield return _time;
+        GameResult();
+    }
+
+    void GameResult()
+    {
+        SceneManager.LoadScene("ResultScene");
+    }
+    
     private int cnt = 0;
     void MaKeNote(Note note)
     {
