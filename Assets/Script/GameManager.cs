@@ -240,4 +240,12 @@ public class GameManager : MonoBehaviour
         comboAnimator.SetTrigger("SHOW");
         judgementAnimator.SetTrigger("SHOW");
     }
+
+    public void Result()
+    {
+        PlayData.combo = combo;
+        PlayData.rate = rate;
+        PlayData.music = music;
+    }
+    
 }

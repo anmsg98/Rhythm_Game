@@ -109,6 +109,7 @@ public class NoteController : MonoBehaviour
 
     void GameResult()
     {
+        GameManager.instance.Result();
         SceneManager.LoadScene("ResultScene");
     }
     
