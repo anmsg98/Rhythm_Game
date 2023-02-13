@@ -51,11 +51,17 @@ TagManager:
   - name: Judge Lines
     uniqueID: 3182187015
     locked: 0
-  - name: Notes
-    uniqueID: 732341197
-    locked: 0
   - name: Judgement
     uniqueID: 2712282189
+    locked: 0
+  - name: Gear
+    uniqueID: 601785153
+    locked: 0
+  - name: Trail
+    uniqueID: 1460265137
+    locked: 0
+  - name: Notes
+    uniqueID: 732341197
     locked: 0
   - name: Effect
     uniqueID: 2985665291

@@ -41,8 +41,8 @@ public class NoteBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        judgeSection = Mathf.Abs(transform.position.y + 4.1f); 
-        detailedJudgment = GameManager.instance.judgeTime * GameManager.instance.noteSpeed * 0.001f;
+        judgeSection = Mathf.Abs(transform.position.y + 1.675f); 
+        detailedJudgment = GameManager.instance.judgeTime * 30 * 0.001f;
         transform.Translate(Vector3.down * GameManager.instance.noteSpeed * Time.deltaTime);
         CheckJudgeMent();
         KeyInput();
