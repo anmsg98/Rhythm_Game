@@ -522,6 +522,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 887815942}
   - {fileID: 802453855}
   - {fileID: 1257296011}
   - {fileID: 1418067509}
@@ -1272,7 +1273,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &802453855
 Transform:
   m_ObjectHideFlags: 0
@@ -1287,9 +1288,8 @@ Transform:
   m_Children:
   - {fileID: 1313293365}
   - {fileID: 577207017}
-  - {fileID: 887815942}
   m_Father: {fileID: 262351019}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &842540951
 GameObject:
@@ -1407,7 +1407,7 @@ GameObject:
   - component: {fileID: 887815944}
   - component: {fileID: 887815943}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: BackGround Movie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1426,8 +1426,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1768954880}
-  m_Father: {fileID: 802453855}
-  m_RootOrder: 2
+  m_Father: {fileID: 262351019}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1610,7 +1610,7 @@ Transform:
   - {fileID: 401973941}
   - {fileID: 1262815591}
   m_Father: {fileID: 262351019}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1262815590
 GameObject:
@@ -1943,7 +1943,7 @@ Transform:
   - {fileID: 52151619}
   - {fileID: 756320106}
   m_Father: {fileID: 262351019}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1559928965
 GameObject:
@@ -2582,7 +2582,7 @@ Transform:
   - {fileID: 1559928966}
   - {fileID: 1654549910}
   m_Father: {fileID: 262351019}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1939397543
 GameObject:

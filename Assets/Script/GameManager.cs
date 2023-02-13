@@ -56,20 +56,21 @@ public class GameManager : MonoBehaviour
     public GameObject[] trails;
     private SpriteRenderer[] trailSpriteRenderers;
 
-    public AudioSource audioSource;
+    
     public string music;
+    public AudioSource audioSource;
+    
     
     public VideoPlayer videoSource;
     public RawImage videoBackGround;
     private AudioSource colorChageSound;
     private byte videoColor = 255;
-    public string video;
     
     // 음악을 실행하는 함수
     void MusicStart()
     {
         AudioClip audioClip = Resources.Load<AudioClip>("Beats/" + music);
-        VideoClip videoClip = Resources.Load<VideoClip>("Video/" + video);
+        VideoClip videoClip = Resources.Load<VideoClip>("Video/" + music);
         audioSource = GetComponent<AudioSource>();
         videoSource = GetComponent<VideoPlayer>();
         
