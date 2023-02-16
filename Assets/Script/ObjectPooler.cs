@@ -53,7 +53,10 @@ public class ObjectPooler : MonoBehaviour
     
     void Update()
     {
-        // 연타나 빠른 비트의 노트가 같은라인에 내려올때 후행 노트가 판정이 같이 처리되는 문제점 해결
+        CheckNotePrior();
+    }
+    public void CheckNotePrior()
+    {
         List<List<int>> arr = new List<List<int>>();
         
         for (int i = 0; i < Notes.Count; i++)
@@ -75,7 +78,6 @@ public class ObjectPooler : MonoBehaviour
             int n = arr[i].Min();
             poolsOfNotes[i][arr[i].IndexOf(n)].GetComponent<NoteBehavior>().noteJudge = true;
         }
-
     }
 }
  

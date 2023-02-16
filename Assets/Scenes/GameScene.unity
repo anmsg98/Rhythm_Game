@@ -322,7 +322,7 @@ MonoBehaviour:
   - {fileID: 5483605104138180910, guid: d8213b98cf1e254449414a020131a798, type: 3}
   - {fileID: 4789963093991047362, guid: 44da2745a68a86a4e99a5291839ad2de, type: 3}
   - {fileID: 6213543284194761658, guid: e50d27fb6208bda4ca3286cec95773f9, type: 3}
-  noteCount: 10
+  noteCount: 20
 --- !u!1 &104822353
 GameObject:
   m_ObjectHideFlags: 0
@@ -2737,12 +2737,13 @@ MonoBehaviour:
   rateUI: {fileID: 1853943281}
   comboUI: {fileID: 1949125947}
   judgementUI: {fileID: 737329176}
+  objectPooler: {fileID: 0}
   trails:
   - {fileID: 1052199384}
   - {fileID: 1092291344}
   - {fileID: 1265237019}
   - {fileID: 1384271827}
-  music: "\uBC14\uB78C\uC5D0\uAC8C \uBD80\uD0C1\uD574"
+  music: Angelic Tears
   audioSource: {fileID: 0}
   videoSource: {fileID: 0}
   videoBackGround: {fileID: 1768954881}

@@ -28,7 +28,6 @@ public class NoteController : MonoBehaviour
     private List<Note> notes = new List<Note>();
     private float x, z;
     public float startY;
-    private int count = 1;
     private Random randnum = new Random();
     
     private string Title;

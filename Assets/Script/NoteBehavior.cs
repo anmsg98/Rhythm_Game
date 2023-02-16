@@ -107,7 +107,6 @@ public class NoteBehavior : MonoBehaviour
             }
             else if (judgeSection < detailedJudgment)
             {
-                // Debug.Log((GameManager.instance.audioSource.timeSamples / 44100f));
                 judge = GameManager.judges.MAX100;
             }
         }
