@@ -9,5 +9,6 @@ public static class PlayData
     public static int combo;
     public static float rate;
     public static string music;
+    public static int bestCombo;
     public static int[] HitScore = new int[12];
 }

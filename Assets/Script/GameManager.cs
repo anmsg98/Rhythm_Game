@@ -259,6 +259,7 @@ public class GameManager : MonoBehaviour
         PlayData.rate = percent;
         PlayData.music = music;
         PlayData.totalNote = noteCount;
+        PlayData.bestCombo = combo;
     }
     
 }
