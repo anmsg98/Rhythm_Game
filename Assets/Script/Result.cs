@@ -27,11 +27,8 @@ public class Result : MonoBehaviour
     void Start()
     {
         // 임의 변수 배정
-        // for (int i = 0; i < 12; i++)
-        // {
-        //     PlayData.HitScore[i] = Random.Range(0, 100);
-        //     PlayData.totalNote += PlayData.HitScore[i];
-        // }
+        Test();
+        
         VideoStart();
         total100 = PlayData.HitScore[11];
         total90 = PlayData.totalNote - PlayData.HitScore[0];
@@ -50,6 +47,18 @@ public class Result : MonoBehaviour
             $"<color=#FFFF00>{PlayData.bestCombo.ToString()}";
     }
 
+    void Test()
+    {
+        PlayData.music = "Angelic Tears";
+        PlayData.combo = 5000;
+        for (int i = 0; i < 12; i++)
+        {
+            PlayData.HitScore[i] = Random.Range(0, 100);
+            PlayData.totalNote += PlayData.HitScore[i];
+        }
+        PlayData.rate = 99.52f;
+        PlayData.bestCombo = 900;
+    }
    
     void Update()
     {
