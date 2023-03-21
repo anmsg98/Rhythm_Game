@@ -7,6 +7,7 @@ using System.IO;
 using UnityEngine.UI;
 using Unity.Mathematics;
 using UnityEngine.Video;
+using UnityEngine.SceneManagement;
 
 public class MusicSelect : MonoBehaviour
 {
@@ -147,6 +148,13 @@ public class MusicSelect : MonoBehaviour
             }
         }
     }
+
+    void GameStart()
+    {
+        PlayData.music = musicList[currentMusic];
+        SceneManager.LoadScene("GameScene");
+    }
+    
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -156,6 +164,11 @@ public class MusicSelect : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             DownScroll();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            GameStart();
         }
     }
 }

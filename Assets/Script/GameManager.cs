@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Timeline;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
@@ -70,6 +71,7 @@ public class GameManager : MonoBehaviour
     // 음악을 실행하는 함수
     void MusicStart()
     {
+        music = PlayData.music;
         AudioClip audioClip = Resources.Load<AudioClip>("Beats/" + music);
         VideoClip videoClip = Resources.Load<VideoClip>("Video/" + music);
         audioSource = GetComponent<AudioSource>();
@@ -257,7 +259,6 @@ public class GameManager : MonoBehaviour
     {
         PlayData.combo = combo;
         PlayData.rate = percent;
-        PlayData.music = music;
         PlayData.totalNote = noteCount;
         PlayData.bestCombo = combo;
     }

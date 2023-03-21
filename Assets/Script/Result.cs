@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
 public class Result : MonoBehaviour
@@ -27,7 +28,7 @@ public class Result : MonoBehaviour
     void Start()
     {
         // 임의 변수 배정
-        Test();
+        //Test();
         
         VideoStart();
         total100 = PlayData.HitScore[11];
@@ -81,6 +82,11 @@ public class Result : MonoBehaviour
             {
                 hitScoreAnim.SetBool("IN_OUT", true);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            MusicSelect();
         }
         
     }
@@ -138,6 +144,19 @@ public class Result : MonoBehaviour
         }
     }
 
+    void MusicSelect()
+    {
+       PlayData.totalNote = 0;
+       PlayData.combo = 0;
+       PlayData.rate = 0.0f;
+       PlayData.music = "";
+       PlayData.bestCombo = 0;
+       for (int i = 0; i < 12; i++)
+       {
+           PlayData.HitScore[i] = 0;
+       }
+       SceneManager.LoadScene("SelectScene");
+    }
     private float[] val = new float[2];
     void PrintJudgeMent()
     {

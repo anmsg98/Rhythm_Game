@@ -45,7 +45,7 @@ public class NoteController : MonoBehaviour
     {
         noteObjectPooler = gameObject.GetComponent<ObjectPooler>();
         startY = GameManager.instance.noteSpeed * 2.6f - 1.675f;
-        TextAsset textAsset = Resources.Load<TextAsset>("Beats/" + GameManager.instance.music);
+        TextAsset textAsset = Resources.Load<TextAsset>("Beats/" + PlayData.music);
         StringReader reader = new StringReader(textAsset.text);
         // 곡제목
         Title = reader.ReadLine();

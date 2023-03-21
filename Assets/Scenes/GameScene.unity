@@ -2743,7 +2743,7 @@ MonoBehaviour:
   - {fileID: 1092291344}
   - {fileID: 1265237019}
   - {fileID: 1384271827}
-  music: Angelic Tears
+  music: 
   audioSource: {fileID: 0}
   videoSource: {fileID: 0}
   videoBackGround: {fileID: 1768954881}
