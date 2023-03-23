@@ -57,12 +57,9 @@ public class GameManager : MonoBehaviour
 
     public GameObject[] trails;
     private SpriteRenderer[] trailSpriteRenderers;
-
     
     public string music;
-    public AudioSource audioSource;
-    
-    
+
     public VideoPlayer videoSource;
     public RawImage videoBackGround;
     private AudioSource colorChageSound;
@@ -72,12 +69,9 @@ public class GameManager : MonoBehaviour
     void MusicStart()
     {
         music = PlayData.music;
-        AudioClip audioClip = Resources.Load<AudioClip>("Beats/" + music);
         VideoClip videoClip = Resources.Load<VideoClip>("Video/" + music);
-        audioSource = GetComponent<AudioSource>();
         videoSource = GetComponent<VideoPlayer>();
         
-        audioSource.clip = audioClip;
         videoSource.clip = videoClip;
         
         videoSource.Play();
