@@ -13,24 +13,28 @@ public class MusicSelect : MonoBehaviour
 {
     
     public static MusicSelect instance { get; set; }
-
-    private void Awake()
-    {
-        if (instance == null) instance = this;
-        else if (instance != this) Destroy(gameObject);
-    }
     
     private List<string> musicList;
     private int currentMusic;
     private int countMusic;
 
+    private Color fadeInColor;
+    
     public Animator anim;
     public GameObject Music;
     public VideoPlayer videoSource;
     public TMP_Text musicInfo;
     public SpriteRenderer coverImage;
+    public Image fadeIn;
+    
+    private void Awake()
+    {
+        instance = this;
+    }
+    
     void Start()
     {
+        fadeInColor = fadeIn.color;
         musicList = new List<string>();
         TextAsset textAsset = Resources.Load<TextAsset>("Beats/Music List");
         StringReader reader = new StringReader(textAsset.text);
@@ -149,6 +153,16 @@ public class MusicSelect : MonoBehaviour
         }
     }
 
+    IEnumerator FadeIn()
+    {
+        while (fadeIn.color.a <= 1.0f)
+        {
+            yield return new WaitForSeconds( 0.001f );
+            fadeInColor.a += 0.001f;
+            fadeIn.color = fadeInColor;
+        }
+        GameStart();
+    }
     void GameStart()
     {
         PlayData.music = musicList[currentMusic];
@@ -168,7 +182,7 @@ public class MusicSelect : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            GameStart();
+            StartCoroutine("FadeIn");
         }
     }
 }

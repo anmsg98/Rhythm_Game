@@ -12,13 +12,15 @@ public class NoteController : MonoBehaviour
 {
     class Note
     {
-        public int noteType { get; set; }
+        public int noteType { get; set; } 
         public float order { get; set; }
-
-        public Note(int noteType, float order)
+        public float noteTiming { get; set; }
+        
+        public Note(int noteType, float order, float noteTiming)
         {
             this.noteType = noteType;
             this.order = order;
+            this.noteTiming = noteTiming;
         }
     }
 
@@ -63,12 +65,14 @@ public class NoteController : MonoBehaviour
         string line;
         int notetype;
         float order;
+        float noteTiming;
         
         while ((line = reader.ReadLine()) != null)
         {
             notetype = Convert.ToInt32(line.Split(' ')[0]);
             order = Convert.ToSingle(line.Split(' ')[1]);
-            Note note = new Note(notetype, order);
+            noteTiming = 8423.1f + (Convert.ToInt32(order) * beatInterval * 44100f);
+            Note note = new Note(notetype, order, noteTiming);
             orderList.Add(order);
             notes.Add(note);
             
@@ -121,6 +125,7 @@ public class NoteController : MonoBehaviour
         obj.transform.position = new Vector3(x, startY, z);
         obj.GetComponent<NoteBehavior>().Initialize();
         obj.GetComponent<NoteBehavior>().notePrior = orderList[cnt];
+        obj.GetComponent<NoteBehavior>().noteTiming = note.noteTiming;
         obj.SetActive(true);
         cnt += 1;
     }

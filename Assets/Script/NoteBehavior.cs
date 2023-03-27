@@ -13,6 +13,7 @@ public class NoteBehavior : MonoBehaviour
     // 노트 타입, 노트 처리 순서, 노트 판정 가능 여부
     public int noteType;
     public float notePrior = 0f;
+    public float noteTiming;
     public bool noteJudge = false;
     
     // 판정구역, 판정 세부조정
@@ -23,6 +24,7 @@ public class NoteBehavior : MonoBehaviour
     public GameManager.judges judge;
     private KeyCode keyCode;
 
+  
     private void Awake()
     {
         instance = this;
@@ -30,10 +32,10 @@ public class NoteBehavior : MonoBehaviour
     void Start()
     {
         missJudge = GameObject.Find("Miss JudgeLine");
-        detailedJudgment = GameManager.instance.judgeTime * GameManager.instance.noteSpeed * 0.001f;
-        
-        if (noteType == 1) keyCode = KeyCode.S;
-        if (noteType == 2) keyCode = KeyCode.D;
+        detailedJudgment = GameManager.instance.judgeTime * 0.001f * 44100f;
+        Debug.Log(detailedJudgment);
+        if (noteType == 1) keyCode = KeyCode.D;
+        if (noteType == 2) keyCode = KeyCode.F;
         if (noteType == 3) keyCode = KeyCode.L;
         if (noteType == 4) keyCode = KeyCode.Semicolon;
     }
@@ -41,8 +43,7 @@ public class NoteBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        judgeSection = Mathf.Abs(transform.position.y + 1.675f); 
-        detailedJudgment = GameManager.instance.judgeTime * 30 * 0.001f;
+        judgeSection = Mathf.Abs(noteTiming - Convert.ToSingle(GameManager.instance.audioSource.timeSamples));
         transform.Translate(Vector3.down * GameManager.instance.noteSpeed * Time.deltaTime);
         CheckJudgeMent();
         KeyInput();
@@ -55,6 +56,7 @@ public class NoteBehavior : MonoBehaviour
             if (judge != GameManager.judges.NONE && noteJudge)
             {
                 GameManager.instance.ProcessJudge(judge);
+                Debug.Log(judgeSection / 44.1f);
                 noteJudge = false;
                 gameObject.SetActive(false);
             }
@@ -122,6 +124,5 @@ public class NoteBehavior : MonoBehaviour
     public void Initialize()
     {
         judge = GameManager.judges.NONE;
-        
     }
 }

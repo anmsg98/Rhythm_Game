@@ -15,8 +15,12 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (instance == null) instance = this;
-        else if (instance != this) Destroy(gameObject);
+        else if (instance != this) Destroy(gameObject); 
+        
+        
     }
+
+    public float startTime;
     
     public float noteSpeed;
     public float judgeTime;
@@ -36,7 +40,7 @@ public class GameManager : MonoBehaviour
     private TMP_Text judgeText;
     private string judge;
     private Animator judgementAnimator;
-
+    
     public GameObject objectPooler;
     public enum judges
     {
@@ -60,28 +64,34 @@ public class GameManager : MonoBehaviour
     
     public string music;
 
+    public AudioSource audioSource;
     public VideoPlayer videoSource;
+    
     public RawImage videoBackGround;
     private AudioSource colorChageSound;
     private byte videoColor = 255;
     
     // 음악을 실행하는 함수
-    void MusicStart()
+    IEnumerator MusicStart()
     {
         music = PlayData.music;
+        AudioClip audioClip = Resources.Load<AudioClip>("Audio/" + music);
         VideoClip videoClip = Resources.Load<VideoClip>("Video/" + music);
         videoSource = GetComponent<VideoPlayer>();
+        audioSource = GetComponent<AudioSource>();
         
+        audioSource.clip = audioClip;
         videoSource.clip = videoClip;
+        videoSource.audioOutputMode = VideoAudioOutputMode.None;
         
+        yield return new WaitForSeconds(2.4f);
+        audioSource.Play();
         videoSource.Play();
     }
 
-
-    
     void Start()
     {
-        Invoke("MusicStart", 2.5f);
+        StartCoroutine("MusicStart");
         comboText = comboUI.GetComponent<TMP_Text>();
         judgeText = judgementUI.GetComponent<TMP_Text>();
         rateText = rateUI.GetComponent<TMP_Text>();
@@ -98,11 +108,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.S)) ShineTrail(0);
-        else if (Input.GetKeyUp(KeyCode.S)) DarkTrail(0);
+        if (Input.GetKey(KeyCode.D)) ShineTrail(0);
+        else if (Input.GetKeyUp(KeyCode.D)) DarkTrail(0);
 
-        if (Input.GetKey(KeyCode.D)) ShineTrail(1);
-        else if (Input.GetKeyUp(KeyCode.D)) DarkTrail(1);
+        if (Input.GetKey(KeyCode.F)) ShineTrail(1);
+        else if (Input.GetKeyUp(KeyCode.F)) DarkTrail(1);
 
         if (Input.GetKey(KeyCode.L)) ShineTrail(2);
         else if (Input.GetKeyUp(KeyCode.L)) DarkTrail(2);
