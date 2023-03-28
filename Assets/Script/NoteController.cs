@@ -5,7 +5,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using Unity.Mathematics;
-using Random = System.Random;
+using Random = UnityEngine.Random;
 using UnityEngine.SceneManagement;
 
 public class NoteController : MonoBehaviour
@@ -30,7 +30,6 @@ public class NoteController : MonoBehaviour
     private List<Note> notes = new List<Note>();
     private float x, z;
     public float startY;
-    private Random randnum = new Random();
     
     private string Title;
     private string Artist;
@@ -45,6 +44,10 @@ public class NoteController : MonoBehaviour
 
     void Start()
     {
+        List<int> lists = new List<int>();
+        lists.Add(1); lists.Add(2); lists.Add(3); lists.Add(4);
+        RandomNote(lists);
+        
         noteObjectPooler = gameObject.GetComponent<ObjectPooler>();
         startY = GameManager.instance.noteSpeed * 2.6f - 1.675f;
         TextAsset textAsset = Resources.Load<TextAsset>("Beats/" + PlayData.music);
@@ -66,10 +69,29 @@ public class NoteController : MonoBehaviour
         int notetype;
         float order;
         float noteTiming;
-        
+
         while ((line = reader.ReadLine()) != null)
         {
             notetype = Convert.ToInt32(line.Split(' ')[0]);
+            
+            // 미러 노트
+            if (MusicSelect.instance.chaosEffect == 1)
+            {
+                if (notetype == 1) notetype = 4;
+                else if (notetype == 2) notetype = 3;
+                else if (notetype == 3) notetype = 2;
+                else if (notetype == 4) notetype = 1;
+            }
+            
+            // 랜덤 노트
+            else if (MusicSelect.instance.chaosEffect == 2)
+            {
+                if (notetype == 1) notetype = lists[0];
+                else if (notetype == 2) notetype = lists[1]; 
+                else if (notetype == 3) notetype = lists[2];
+                else if (notetype == 4) notetype = lists[3];
+            }
+
             order = Convert.ToSingle(line.Split(' ')[1]);
             noteTiming = 8423.1f + (Convert.ToInt32(order) * beatInterval * 44100f);
             Note note = new Note(notetype, order, noteTiming);
@@ -120,8 +142,10 @@ public class NoteController : MonoBehaviour
     void MaKeNote(Note note)
     {
         GameObject obj = noteObjectPooler.getObject(note.noteType);
+
         x = obj.transform.position.x;
         z = obj.transform.position.z;
+
         obj.transform.position = new Vector3(x, startY, z);
         obj.GetComponent<NoteBehavior>().Initialize();
         obj.GetComponent<NoteBehavior>().notePrior = orderList[cnt];
@@ -129,7 +153,24 @@ public class NoteController : MonoBehaviour
         obj.SetActive(true);
         cnt += 1;
     }
-
     
+    private List<T> RandomNote<T>(List<T> list)
+    {
+        int random1,  random2;
+        T temp;
+
+        for (int i = 0; i < list.Count; ++i)
+        {
+            random1 = Random.Range(0, list.Count);
+            random2 = Random.Range(0, list.Count);
+
+            temp = list[random1];
+            list[random1] = list[random2];
+            list[random2] = temp;
+        }
+
+        return list;
+    }
+
 
 }

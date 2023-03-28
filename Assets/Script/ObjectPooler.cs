@@ -21,9 +21,13 @@ public class ObjectPooler : MonoBehaviour
             poolsOfNotes.Add(new List<GameObject>());
             for (int j = 0; j < noteCount; j++)
             {
-                GameObject obj = Instantiate(Notes[i]);
-                obj.SetActive(false);
+                GameObject obj;
                 
+                obj = Instantiate(Notes[i],
+                        new Vector3(Notes[i].transform.position.x + (MusicSelect.instance.gearPosition * 5.77f), Notes[i].transform.position.y ,Notes[i].transform.position.z),
+                        Quaternion.identity);
+               
+                obj.SetActive(false);
                 poolsOfNotes[i].Add(obj);
             }
         }
@@ -41,7 +45,13 @@ public class ObjectPooler : MonoBehaviour
 
         if (more)
         {
-            GameObject obj = Instantiate(Notes[noteType - 1]);
+            GameObject obj;
+            
+            obj = Instantiate(Notes[noteType - 1],
+                new Vector3(Notes[noteType - 1].transform.position.x + (MusicSelect.instance.gearPosition * 5.77f), 
+                    Notes[noteType - 1].transform.position.y ,Notes[noteType - 1].transform.position.z),
+                Quaternion.identity);
+            
             poolsOfNotes[noteType - 1].Add(obj);
             return obj;
         }

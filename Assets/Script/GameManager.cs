@@ -59,6 +59,8 @@ public class GameManager : MonoBehaviour
         Break
     };
 
+    public Transform gearPosition;
+    
     public GameObject[] trails;
     private SpriteRenderer[] trailSpriteRenderers;
     
@@ -92,6 +94,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         StartCoroutine("MusicStart");
+        GearTransition();
+       
         comboText = comboUI.GetComponent<TMP_Text>();
         judgeText = judgementUI.GetComponent<TMP_Text>();
         rateText = rateUI.GetComponent<TMP_Text>();
@@ -259,6 +263,28 @@ public class GameManager : MonoBehaviour
         judgementAnimator.SetTrigger("SHOW");
     }
 
+    private void GearTransition()
+    {
+        int pos = MusicSelect.instance.gearPosition;
+
+        gearPosition.position =
+            new Vector3(gearPosition.position.x + (pos * 5.77f), gearPosition.position.y, gearPosition.position.z);
+            rateUI.transform.position =
+                new Vector3(rateUI.transform.position.x + (pos * 5.77f), rateUI.transform.position.y,
+                    rateUI.transform.position.z);
+            comboUI.transform.position =
+                new Vector3(comboUI.transform.position.x + (pos * 5.77f), comboUI.transform.position.y,
+                    comboUI.transform.position.z);
+            judgementUI.transform.position =
+                new Vector3(judgementUI.transform.position.x + (pos * 5.77f), judgementUI.transform.position.y,
+                    judgementUI.transform.position.z);
+            for (int i = 0; i < 4; i++)
+            {
+                trails[i].transform.position =
+                    new Vector3(trails[i].transform.position.x + (pos * 5.77f), trails[i].transform.position.y,
+                        trails[i].transform.position.z);
+            }
+    }
     public void Result()
     {
         PlayData.combo = combo;

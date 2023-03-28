@@ -236,6 +236,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3063bd5b740ea947868fdd38fdb81d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chaosEffect: 1
+  gearPosition: -1
   anim: {fileID: 1882598814}
   Music: {fileID: 3740558037597760146, guid: f9431e00514972f4288e97fc001b74e9, type: 3}
   videoSource: {fileID: 177830236}

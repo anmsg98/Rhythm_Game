@@ -2797,6 +2797,7 @@ MonoBehaviour:
   comboUI: {fileID: 1949125947}
   judgementUI: {fileID: 737329176}
   objectPooler: {fileID: 0}
+  gearPosition: {fileID: 259726310}
   trails:
   - {fileID: 1052199384}
   - {fileID: 1092291344}

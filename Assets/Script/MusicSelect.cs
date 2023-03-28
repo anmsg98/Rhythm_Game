@@ -19,6 +19,9 @@ public class MusicSelect : MonoBehaviour
     private int countMusic;
 
     private Color fadeInColor;
+
+    public int chaosEffect;
+    public int gearPosition;
     
     public Animator anim;
     public GameObject Music;
