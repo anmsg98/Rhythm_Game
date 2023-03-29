@@ -535,7 +535,7 @@ Transform:
   - {fileID: 1888096552}
   - {fileID: 259726310}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &303861977
 GameObject:
@@ -2791,13 +2791,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startTime: 2.4
-  noteSpeed: 15
   judgeTime: 42
   rateUI: {fileID: 1853943281}
   comboUI: {fileID: 1949125947}
   judgementUI: {fileID: 737329176}
   objectPooler: {fileID: 0}
   gearPosition: {fileID: 259726310}
+  gearTransparency: {fileID: 1954565831}
   trails:
   - {fileID: 1052199384}
   - {fileID: 1092291344}
@@ -2820,7 +2820,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1939397546
 AudioSource:

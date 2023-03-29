@@ -49,7 +49,7 @@ public class NoteController : MonoBehaviour
         RandomNote(lists);
         
         noteObjectPooler = gameObject.GetComponent<ObjectPooler>();
-        startY = GameManager.instance.noteSpeed * 2.6f - 1.675f;
+        startY = MusicSelect.instance.noteSpeed * 2.6f - 1.675f;
         TextAsset textAsset = Resources.Load<TextAsset>("Beats/" + PlayData.music);
         StringReader reader = new StringReader(textAsset.text);
         // 곡제목
@@ -75,7 +75,7 @@ public class NoteController : MonoBehaviour
             notetype = Convert.ToInt32(line.Split(' ')[0]);
             
             // 미러 노트
-            if (MusicSelect.instance.chaosEffect == 1)
+            if (MusicSelect.instance.chaos == 1)
             {
                 if (notetype == 1) notetype = 4;
                 else if (notetype == 2) notetype = 3;
@@ -84,7 +84,7 @@ public class NoteController : MonoBehaviour
             }
             
             // 랜덤 노트
-            else if (MusicSelect.instance.chaosEffect == 2)
+            else if (MusicSelect.instance.chaos == 2)
             {
                 if (notetype == 1) notetype = lists[0];
                 else if (notetype == 2) notetype = lists[1]; 

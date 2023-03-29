@@ -33,7 +33,6 @@ public class NoteBehavior : MonoBehaviour
     {
         missJudge = GameObject.Find("Miss JudgeLine");
         detailedJudgment = GameManager.instance.judgeTime * 0.001f * 44100f;
-        Debug.Log(detailedJudgment);
         if (noteType == 1) keyCode = KeyCode.D;
         if (noteType == 2) keyCode = KeyCode.F;
         if (noteType == 3) keyCode = KeyCode.L;
@@ -44,7 +43,7 @@ public class NoteBehavior : MonoBehaviour
     void Update()
     {
         judgeSection = Mathf.Abs(noteTiming - Convert.ToSingle(GameManager.instance.audioSource.timeSamples));
-        transform.Translate(Vector3.down * GameManager.instance.noteSpeed * Time.deltaTime);
+        transform.Translate(Vector3.down * MusicSelect.instance.noteSpeed * Time.deltaTime);
         CheckJudgeMent();
         KeyInput();
     }
@@ -56,7 +55,6 @@ public class NoteBehavior : MonoBehaviour
             if (judge != GameManager.judges.NONE && noteJudge)
             {
                 GameManager.instance.ProcessJudge(judge);
-                Debug.Log(judgeSection / 44.1f);
                 noteJudge = false;
                 gameObject.SetActive(false);
             }

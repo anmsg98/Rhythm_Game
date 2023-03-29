@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine.Timeline;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,7 +23,6 @@ public class GameManager : MonoBehaviour
 
     public float startTime;
     
-    public float noteSpeed;
     public float judgeTime;
 
     public GameObject rateUI;
@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
     };
 
     public Transform gearPosition;
+    public SpriteRenderer gearTransparency;
     
     public GameObject[] trails;
     private SpriteRenderer[] trailSpriteRenderers;
@@ -94,7 +95,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         StartCoroutine("MusicStart");
-        GearTransition();
+        GearOptimize();
        
         comboText = comboUI.GetComponent<TMP_Text>();
         judgeText = judgementUI.GetComponent<TMP_Text>();
@@ -123,16 +124,17 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Semicolon)) ShineTrail(3);
         else if (Input.GetKeyUp(KeyCode.Semicolon)) DarkTrail(3);
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        
+        // 인게임중 노트 스피드 바꾸면 싱크 안맞음 수정 필요
+        /*if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            noteSpeed -= 1f;
+            MusicSelect.instance.noteSpeed -= 1f;
         }
-
+        
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            noteSpeed += 1f;
-        }
+            MusicSelect.instance.noteSpeed += 1f;
+        }*/
         
         if (Input.GetKeyDown(KeyCode.Insert))
         {
@@ -152,6 +154,11 @@ public class GameManager : MonoBehaviour
                 videoColor -= 51;
             }
             videoBackGround.color = new Color32(videoColor, videoColor, videoColor, 255);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("SelectScene");
         }
     }
 
@@ -263,27 +270,41 @@ public class GameManager : MonoBehaviour
         judgementAnimator.SetTrigger("SHOW");
     }
 
-    private void GearTransition()
+    private void GearOptimize()
     {
         int pos = MusicSelect.instance.gearPosition;
 
         gearPosition.position =
             new Vector3(gearPosition.position.x + (pos * 5.77f), gearPosition.position.y, gearPosition.position.z);
-            rateUI.transform.position =
-                new Vector3(rateUI.transform.position.x + (pos * 5.77f), rateUI.transform.position.y,
-                    rateUI.transform.position.z);
-            comboUI.transform.position =
-                new Vector3(comboUI.transform.position.x + (pos * 5.77f), comboUI.transform.position.y,
-                    comboUI.transform.position.z);
-            judgementUI.transform.position =
-                new Vector3(judgementUI.transform.position.x + (pos * 5.77f), judgementUI.transform.position.y,
-                    judgementUI.transform.position.z);
-            for (int i = 0; i < 4; i++)
-            {
-                trails[i].transform.position =
-                    new Vector3(trails[i].transform.position.x + (pos * 5.77f), trails[i].transform.position.y,
-                        trails[i].transform.position.z);
-            }
+        
+        rateUI.transform.position =
+            new Vector3(rateUI.transform.position.x + (pos * 5.77f), rateUI.transform.position.y,
+                rateUI.transform.position.z);
+        
+        comboUI.transform.position =
+            new Vector3(comboUI.transform.position.x + (pos * 5.77f), comboUI.transform.position.y,
+                comboUI.transform.position.z);
+        
+        judgementUI.transform.position =
+            new Vector3(judgementUI.transform.position.x + (pos * 5.77f), judgementUI.transform.position.y,
+                judgementUI.transform.position.z);
+        
+        for (int i = 0; i < 4; i++)
+        {
+            trails[i].transform.position =
+                new Vector3(trails[i].transform.position.x + (pos * 5.77f), trails[i].transform.position.y,
+                    trails[i].transform.position.z);
+        }
+
+        Color color;
+        color = gearTransparency.color;
+        color.a = 1.0f - MusicSelect.instance.transparency * 0.01f;
+        gearTransparency.color = color;
+
+        color = rateUI.GetComponent<TMP_Text>().color;
+        if (MusicSelect.instance.rate == 0) color.a = 0f;
+        else color.a = 1.0f;
+        rateUI.GetComponent<TMP_Text>().color = color;
     }
     public void Result()
     {

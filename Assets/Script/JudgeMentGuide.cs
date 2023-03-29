@@ -9,7 +9,7 @@ public class JudgeMentGuide : MonoBehaviour
 {
     void Start()
     {
-        transform.Translate(Vector3.down * GameManager.instance.judgeTime * GameManager.instance.noteSpeed * 0.001f);
+        transform.Translate(Vector3.down * GameManager.instance.judgeTime * MusicSelect.instance.noteSpeed * 0.001f);
     }
 
     // Update is called once per frame
