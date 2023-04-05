@@ -8,6 +8,10 @@ using UnityEngine.Video;
 
 public class Result : MonoBehaviour
 {
+    public AudioSource resultSound;
+    
+    public SpriteRenderer fadeIn;
+    
     private VideoPlayer videoSource;
     public Slider[] sliders;
     
@@ -63,14 +67,19 @@ public class Result : MonoBehaviour
     void Update()
     {
         SliderControll();
+        
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (detailBoxAnim.GetBool("IN_OUT"))
             {
+                resultSound.clip = Resources.Load<AudioClip>("Audio/Menu off");
+                resultSound.Play();
                 detailBoxAnim.SetBool("IN_OUT", false);
             }
             else
             {
+                resultSound.clip = Resources.Load<AudioClip>("Audio/Menu on");
+                resultSound.Play();
                 detailBoxAnim.SetBool("IN_OUT", true);
             }
             if (hitScoreAnim.GetBool("IN_OUT"))
@@ -145,6 +154,9 @@ public class Result : MonoBehaviour
 
     void MusicSelect()
     {
+       resultSound.clip = Resources.Load<AudioClip>("Audio/Enter");
+       resultSound.Play();
+       
        PlayData.totalNote = 0;
        PlayData.combo = 0;
        PlayData.rate = 0.0f;
@@ -154,8 +166,22 @@ public class Result : MonoBehaviour
        {
            PlayData.HitScore[i] = 0;
        }
-       SceneManager.LoadScene("SelectScene");
+       
+       StartCoroutine(FadeIn());
     }
+
+    private Color fadeInColor;
+    public IEnumerator FadeIn()
+    {
+        while (fadeIn.color.a <= 1.0f)
+        {
+            yield return new WaitForSeconds( 0.001f );
+            fadeInColor.a += 0.01f;
+            fadeIn.color = fadeInColor;
+        }
+        SceneManager.LoadScene("SelectScene");
+    }
+    
     private float[] val = new float[2];
     void PrintJudgeMent()
     {

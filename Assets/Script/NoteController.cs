@@ -129,15 +129,9 @@ public class NoteController : MonoBehaviour
         _time = new WaitForSeconds(startingPoint + order * beatInterval + 8.0f);
 
         yield return _time;
-        GameResult();
+        StartCoroutine(GameManager.instance.FadeIn());
     }
 
-    void GameResult()
-    {
-        GameManager.instance.Result();
-        SceneManager.LoadScene("ResultScene");
-    }
-    
     private int cnt = 0;
     void MaKeNote(Note note)
     {

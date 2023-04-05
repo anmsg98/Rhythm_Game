@@ -42,10 +42,14 @@ public class NoteBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        judgeSection = Mathf.Abs(noteTiming - Convert.ToSingle(GameManager.instance.audioSource.timeSamples));
-        transform.Translate(Vector3.down * MusicSelect.instance.noteSpeed * Time.deltaTime);
-        CheckJudgeMent();
-        KeyInput();
+        if (!GameManager.instance.pause.activeInHierarchy)
+        {
+            judgeSection = Mathf.Abs(noteTiming - Convert.ToSingle(GameManager.instance.audioSource.timeSamples));
+            transform.Translate(Vector3.down * MusicSelect.instance.noteSpeed * Time.deltaTime);
+            CheckJudgeMent();
+            KeyInput();
+        }
+       
     }
 
     void KeyInput()

@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     
     public float judgeTime;
 
+    public SpriteRenderer fadeIn;
+    
     public GameObject rateUI;
     private TMP_Text rateText;
     private float rate;
@@ -73,6 +75,13 @@ public class GameManager : MonoBehaviour
     public RawImage videoBackGround;
     private AudioSource colorChageSound;
     private byte videoColor = 255;
+
+    public GameObject pause;
+    private int pauseMenuIndex;
+    public Material[] gradientMat;
+    private Color leftCol;
+    private Color rightCol;
+    public TMP_Text[] pauseMenuText;
     
     // 음악을 실행하는 함수
     IEnumerator MusicStart()
@@ -113,59 +122,61 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.D)) ShineTrail(0);
-        else if (Input.GetKeyUp(KeyCode.D)) DarkTrail(0);
-
-        if (Input.GetKey(KeyCode.F)) ShineTrail(1);
-        else if (Input.GetKeyUp(KeyCode.F)) DarkTrail(1);
-
-        if (Input.GetKey(KeyCode.L)) ShineTrail(2);
-        else if (Input.GetKeyUp(KeyCode.L)) DarkTrail(2);
-
-        if (Input.GetKey(KeyCode.Semicolon)) ShineTrail(3);
-        else if (Input.GetKeyUp(KeyCode.Semicolon)) DarkTrail(3);
-        
-        // 인게임중 노트 스피드 바꾸면 싱크 안맞음 수정 필요
-        /*if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (!pause.activeInHierarchy)
         {
-            MusicSelect.instance.noteSpeed -= 1f;
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            MusicSelect.instance.noteSpeed += 1f;
-        }*/
-        
-        if (Input.GetKeyDown(KeyCode.Insert))
-        {
-            if (videoColor < 255)
+            if (Input.GetKey(KeyCode.D)) ShineTrail(0);
+            else if (Input.GetKeyUp(KeyCode.D)) DarkTrail(0);
+
+            if (Input.GetKey(KeyCode.F)) ShineTrail(1);
+            else if (Input.GetKeyUp(KeyCode.F)) DarkTrail(1);
+
+            if (Input.GetKey(KeyCode.L)) ShineTrail(2);
+            else if (Input.GetKeyUp(KeyCode.L)) DarkTrail(2);
+
+            if (Input.GetKey(KeyCode.Semicolon)) ShineTrail(3);
+            else if (Input.GetKeyUp(KeyCode.Semicolon)) DarkTrail(3);
+
+            // 인게임중 노트 스피드 바꾸면 싱크 안맞음 수정 필요
+            /*if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                colorChageSound.Play();
-                videoColor += 51;
+                MusicSelect.instance.noteSpeed -= 1f;
             }
-            videoBackGround.color = new Color32(videoColor, videoColor, videoColor, 255);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Delete))
-        {
-            if (videoColor > 0)
+            
+            if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                colorChageSound.Play();
-                videoColor -= 51;
+                MusicSelect.instance.noteSpeed += 1f;
+            }*/
+
+            if (Input.GetKeyDown(KeyCode.Insert))
+            {
+                if (videoColor < 255)
+                {
+                    colorChageSound.Play();
+                    videoColor += 51;
+                }
+
+                videoBackGround.color = new Color32(videoColor, videoColor, videoColor, 255);
             }
-            videoBackGround.color = new Color32(videoColor, videoColor, videoColor, 255);
+
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                if (videoColor > 0)
+                {
+                    colorChageSound.Play();
+                    videoColor -= 51;
+                }
+
+                videoBackGround.color = new Color32(videoColor, videoColor, videoColor, 255);
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            SceneManager.LoadScene("SelectScene");
-        }
+        Pause();
     }
 
     public void ShineTrail(int index)
     {
         Color color = trailSpriteRenderers[index].color;
-        color.a = 0.32f;
+        color.a = 0.15f;
         trailSpriteRenderers[index].color = color;
     }
 
@@ -306,6 +317,103 @@ public class GameManager : MonoBehaviour
         else color.a = 1.0f;
         rateUI.GetComponent<TMP_Text>().color = color;
     }
+
+    Color fadeInColor;
+    public IEnumerator FadeIn()
+    {
+        while (fadeIn.color.a <= 1.0f)
+        {
+            yield return new WaitForSeconds( 0.001f );
+            fadeInColor.a += 0.01f;
+            fadeIn.color = fadeInColor;
+        }
+        Result();
+        SceneManager.LoadScene("ResultScene");
+    }
+
+    public void Pause()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!pause.activeInHierarchy)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    gradientMat[i].SetColor("_Color", new Color(0f, 0f, 0f));
+                    gradientMat[i].SetColor("_Color2", new Color(0f, 0f, 0f));
+                }
+                pause.SetActive(true);
+                audioSource.Pause();
+                videoSource.Pause();
+                StartCoroutine(EnablePauseMenu());
+                DisablePauseMenu();
+            }
+        }
+        
+        if (pause.activeInHierarchy)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                leftCol = new Color(0f, 0f, 0f);
+                rightCol = new Color(0f, 0f, 0f);
+                pauseMenuIndex -= 1;
+                if (pauseMenuIndex < 0) pauseMenuIndex = 2;
+                StartCoroutine(EnablePauseMenu());
+                DisablePauseMenu();
+            }
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                leftCol = new Color(0f, 0f, 0f);
+                rightCol = new Color(0f, 0f, 0f);
+                pauseMenuIndex += 1;
+                if (pauseMenuIndex > 2) pauseMenuIndex = 0;
+                StartCoroutine(EnablePauseMenu());
+                DisablePauseMenu();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                if (pauseMenuIndex == 0)
+                    SceneManager.LoadScene("GameScene");
+                else if (pauseMenuIndex == 1)
+                    SceneManager.LoadScene("SelectScene");
+                else
+                {
+                    Application.Quit();
+                }
+            }
+        }
+    }
+
+    IEnumerator EnablePauseMenu()
+    { 
+       while (leftCol.r <= 1.0f)
+       {
+            leftCol.r += 0.01f; leftCol.g += 0.00815f; leftCol.b += 0.00047f;
+            rightCol.r += 0.01f; rightCol.g += 0.00517f; rightCol.b += 0.00549f;
+            gradientMat[pauseMenuIndex].SetColor("_Color", leftCol);
+            gradientMat[pauseMenuIndex].SetColor("_Color2", rightCol);
+            yield return new WaitForSeconds(0.01f);
+       }
+    }
+
+    void DisablePauseMenu()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            if (i != pauseMenuIndex)
+            {
+                gradientMat[i].SetColor("_Color", new Color(0f,0f,0f));
+                gradientMat[i].SetColor("_Color2", new Color(0f,0f,0f));
+                pauseMenuText[i].color = new Color(1f, 1f, 1f);
+            }
+            else
+            {
+                pauseMenuText[i].color = new Color(0f, 0f, 0f);
+            }
+        }
+    }
+
     public void Result()
     {
         PlayData.combo = combo;

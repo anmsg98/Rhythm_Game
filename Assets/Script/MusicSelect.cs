@@ -18,6 +18,8 @@ public class MusicSelect : MonoBehaviour
     private int currentMusic;
     private int countMusic;
 
+    public AudioSource optionSound;
+    
     private Color fadeInColor;
     
     public Animator musicInfoAnim;
@@ -32,7 +34,7 @@ public class MusicSelect : MonoBehaviour
     public GameObject[] optionText;
     public GameObject selectedBox;
     private int optionIndex;
-    public float noteSpeed = 15f;
+    public float noteSpeed;
     private int fever;
     private int fader;
     public int chaos;
@@ -48,6 +50,8 @@ public class MusicSelect : MonoBehaviour
     
     void Start()
     {
+       
+        Initialize();
         fadeInColor = fadeIn.color;
         musicList = new List<string>();
         TextAsset textAsset = Resources.Load<TextAsset>("Beats/Music List");
@@ -85,10 +89,14 @@ public class MusicSelect : MonoBehaviour
         {
             if (optionBoxAnim.GetBool("IN_OUT"))
             {
+                optionSound.clip = Resources.Load<AudioClip>("Audio/Menu off");
+                optionSound.Play();
                 optionBoxAnim.SetBool("IN_OUT", false);
             }
             else
             {
+                optionSound.clip = Resources.Load<AudioClip>("Audio/Menu on");
+                optionSound.Play();
                 optionBoxAnim.SetBool("IN_OUT", true);
             }
         }
@@ -96,6 +104,10 @@ public class MusicSelect : MonoBehaviour
     
     void UpScroll()
     {
+        AudioSource scroll = GetComponent<AudioSource>();
+        scroll.clip = Resources.Load<AudioClip>("Audio/Scroll");
+        scroll.Play();
+        
         videoSource.Stop();
         currentMusic -= 1;
         if (currentMusic < 0)
@@ -106,6 +118,10 @@ public class MusicSelect : MonoBehaviour
 
     void DownScroll()
     {
+        AudioSource scroll = GetComponent<AudioSource>();
+        scroll.clip = Resources.Load<AudioClip>("Audio/Scroll");
+        scroll.Play();
+        
         videoSource.Stop();
         currentMusic += 1;
         if (currentMusic >= countMusic)
@@ -184,12 +200,16 @@ public class MusicSelect : MonoBehaviour
 
     IEnumerator FadeIn()
     {
+        AudioSource gameStart = GetComponent<AudioSource>();
+        gameStart.clip = Resources.Load<AudioClip>("Audio/Start");
+        gameStart.Play();
         while (fadeIn.color.a <= 1.0f)
         {
             yield return new WaitForSeconds( 0.001f );
-            fadeInColor.a += 0.001f;
+            fadeInColor.a += 0.01f;
             fadeIn.color = fadeInColor;
         }
+        yield return new WaitForSeconds( 2f );
         GameStart();
     }
 
@@ -221,7 +241,6 @@ public class MusicSelect : MonoBehaviour
         if (optionIndex == 0)
         {
             noteSpeed += (value * 0.5f);
-            
             if (noteSpeed < 5) noteSpeed = 5f;
             else if (noteSpeed > 20.0f) noteSpeed = 20.0f;
         
@@ -232,7 +251,6 @@ public class MusicSelect : MonoBehaviour
         else if (optionIndex == 1)
         {
             fever += value;
-            
             if (fever < 0) fever = 0;
             else if (fever > 2) fever = 2;
             
@@ -245,7 +263,6 @@ public class MusicSelect : MonoBehaviour
         else if (optionIndex == 2)
         {
             fader += value;
-            
             if (fader < 0) fader = 0;
             else if (fader > 2) fader = 2;
             
@@ -257,7 +274,6 @@ public class MusicSelect : MonoBehaviour
         else if (optionIndex == 3)
         {
             chaos += value;
-            
             if (chaos < 0) chaos = 0;
             else if (chaos > 2) chaos = 2;
             
@@ -269,7 +285,6 @@ public class MusicSelect : MonoBehaviour
         else if (optionIndex == 4)
         {
             transparency += value * 10;
-            
             if (transparency < 0) transparency = 0;
             else if (transparency > 100) transparency = 100;
 
@@ -281,7 +296,6 @@ public class MusicSelect : MonoBehaviour
         else if (optionIndex == 5)
         {
             gearPosition += value;
-            
             if (gearPosition < -1) gearPosition = -1;
             else if (gearPosition > 1) gearPosition = 1;
             
@@ -293,7 +307,6 @@ public class MusicSelect : MonoBehaviour
         else if (optionIndex == 6)
         {
             rate += value;
-            
             if (rate < 0) rate = 0;
             else if (rate > 1) rate = 1;
             
@@ -301,6 +314,74 @@ public class MusicSelect : MonoBehaviour
             if (rate == 0) textValue.text = "OFF";
             else if (rate == 1) textValue.text = "ON";
         }
+    }
+
+    void Initialize()
+    {
+        string textAsset = Application.streamingAssetsPath + "/Option/PlayerOption.txt";
+        StreamReader reader = new StreamReader(textAsset);
+        string line;
+        line = reader.ReadLine();
+        noteSpeed = (float) Convert.ToDouble(line.Split(' ')[1]);
+        line = reader.ReadLine();
+        fever = Convert.ToInt32(line.Split(' ')[1]);
+        line = reader.ReadLine();
+        fader = Convert.ToInt32(line.Split(' ')[1]);
+        line = reader.ReadLine();
+        chaos = Convert.ToInt32(line.Split(' ')[1]);
+        line = reader.ReadLine();
+        transparency = Convert.ToInt32(line.Split(' ')[1]);
+        line = reader.ReadLine();
+        gearPosition = Convert.ToInt32(line.Split(' ')[1]);
+        line = reader.ReadLine();
+        rate = Convert.ToInt32(line.Split(' ')[1]);
+        
+        TMP_Text textValue;
+
+        textValue = optionText[0].transform.Find("Value").gameObject.GetComponent<TMP_Text>();
+        textValue.text = noteSpeed.ToString("F1");
+
+        textValue = optionText[1].transform.Find("Value").gameObject.GetComponent<TMP_Text>();
+        if (fever == 0) textValue.text = "AUTO X5";
+        else if (fever == 1) textValue.text = "X5";
+        else if (fever == 2) textValue.text = "OFF";
+
+        textValue = optionText[2].transform.Find("Value").gameObject.GetComponent<TMP_Text>();
+        if (fader == 0) textValue.text = "OFF";
+        else if (fader == 1) textValue.text = "FADER 1";
+        else if (fader == 2) textValue.text = "FADER 2";
+
+        textValue = optionText[3].transform.Find("Value").gameObject.GetComponent<TMP_Text>();
+        if (chaos == 0) textValue.text = "OFF";
+        else if (chaos == 1) textValue.text = "MIRROR";
+        else if (chaos == 2) textValue.text = "RANDOM";
+
+        transparecyScroll.value = transparency * 0.01f;
+        textValue = optionText[4].transform.Find("Value").gameObject.GetComponent<TMP_Text>();
+        textValue.text = transparency.ToString() + "%";
+
+        textValue = optionText[5].transform.Find("Value").gameObject.GetComponent<TMP_Text>();
+        if (gearPosition == -1) textValue.text = "LEFT";
+        else if (gearPosition == 0) textValue.text = "CENTER";
+        else if (gearPosition == 1) textValue.text = "RIGHT";
+
+        textValue = optionText[6].transform.Find("Value").gameObject.GetComponent<TMP_Text>();
+        if (rate == 0) textValue.text = "OFF";
+        else if (rate == 1) textValue.text = "ON";
+    }
+
+    void SaveOption()
+    {
+        string path = Application.streamingAssetsPath + "/Option/PlayerOption.txt";
+        StreamWriter writer = new StreamWriter(path, false);
+        writer.WriteLine("NoteSpeed " + noteSpeed.ToString("F1"));
+        writer.WriteLine("fever " + fever.ToString());
+        writer.WriteLine("fader " + fader.ToString());
+        writer.WriteLine("chaos " + chaos.ToString());
+        writer.WriteLine("transparency " + transparency.ToString());
+        writer.WriteLine("gearPosition " + gearPosition.ToString());
+        writer.WriteLine("rate " + rate.ToString());
+        writer.Close();
     }
     void GameStart()
     {
@@ -345,10 +426,12 @@ public class MusicSelect : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 OptionOptimize(-1);
+                SaveOption();
             }
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 OptionOptimize(1);
+                SaveOption();
             }
         }
         OptionBox();

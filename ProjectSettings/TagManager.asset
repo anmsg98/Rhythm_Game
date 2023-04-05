@@ -70,3 +70,6 @@ TagManager:
   - name: Effect
     uniqueID: 2985665291
     locked: 0
+  - name: Panel
+    uniqueID: 4192515579
+    locked: 0
