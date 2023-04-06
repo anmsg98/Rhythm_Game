@@ -16,9 +16,10 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (instance == null) instance = this;
-        else if (instance != this) Destroy(gameObject); 
-        
-        
+        else if (instance != this) Destroy(gameObject);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
     }
 
     public float startTime;

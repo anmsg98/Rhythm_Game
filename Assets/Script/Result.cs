@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
+using Random = UnityEngine.Random;
 
 public class Result : MonoBehaviour
 {
@@ -27,7 +29,13 @@ public class Result : MonoBehaviour
     public TMP_Text[] judgeMents;
     public TMP_Text hitScore;
     public TMP_Text rate;
-    
+
+    private void Awake()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     void Start()
     {
         // 임의 변수 배정

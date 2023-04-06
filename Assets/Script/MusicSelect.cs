@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.IO;
+using Mono.Cecil;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using UnityEngine.SceneManagement;
@@ -17,8 +19,6 @@ public class MusicSelect : MonoBehaviour
     private List<string> musicList;
     private int currentMusic;
     private int countMusic;
-
-    public AudioSource optionSound;
     
     private Color fadeInColor;
     
@@ -31,6 +31,11 @@ public class MusicSelect : MonoBehaviour
     public SpriteRenderer coverImage;
     public Image fadeIn;
 
+    public GameObject MenuUi;
+    public GameObject optionBlur;
+    
+    public AudioSource optionSound;
+    public SpriteRenderer[] optionSprite;
     public GameObject[] optionText;
     public GameObject selectedBox;
     private int optionIndex;
@@ -42,10 +47,14 @@ public class MusicSelect : MonoBehaviour
     public Scrollbar transparecyScroll;
     public int gearPosition;
     public int rate;
-    
+
+    public GameObject QuitUI;
+
     private void Awake()
     {
         instance = this;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
     
     void Start()
@@ -215,6 +224,17 @@ public class MusicSelect : MonoBehaviour
 
     void SelectedBox()
     {
+        for (int i = 0; i < 7; i++)
+        {
+            if (i == optionIndex)
+            {
+                optionSprite[i].sprite = Resources.Load<Sprite>("Sprites/Option_Bar_2");
+            }
+            else
+            {
+                optionSprite[i].sprite = Resources.Load<Sprite>("Sprites/Option_Bar");
+            }
+        }
         Transform selectPos = selectedBox.GetComponent<Transform>();
         AudioSource selectSound = selectedBox.GetComponent<AudioSource>();
         
@@ -383,6 +403,7 @@ public class MusicSelect : MonoBehaviour
         writer.WriteLine("rate " + rate.ToString());
         writer.Close();
     }
+    
     void GameStart()
     {
         PlayData.music = musicList[currentMusic];
@@ -391,49 +412,80 @@ public class MusicSelect : MonoBehaviour
     
     void Update()
     {
-        if (optionBoxAnim.GetBool("IN_OUT") == false)
+        if (!QuitUI.activeInHierarchy)
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (optionBoxAnim.GetBool("IN_OUT") == false)
             {
-                UpScroll();
-            }
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    UpScroll();
+                }
 
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    DownScroll();
+                }
+
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    StartCoroutine("FadeIn");
+                    MenuUi.SetActive(false);
+                }
+                
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    optionSound.clip = Resources.Load<AudioClip>("Audio/Menu off");
+                    optionSound.Play();
+                    MenuUi.SetActive(false);
+                    QuitUI.SetActive(true);
+                }
+            }
+            else
             {
-                DownScroll();
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    optionIndex -= 1;
+                    if (optionIndex < 0) optionIndex = 6;
+                    SelectedBox();
+                }
+
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    optionIndex += 1;
+                    if (optionIndex > 6) optionIndex = 0;
+                    SelectedBox();
+                }
+
+                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    OptionOptimize(-1);
+                    SaveOption();
+                }
+
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    OptionOptimize(1);
+                    SaveOption();
+                }
+            }
+            
+            OptionBox();
+            
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                optionSound.clip = Resources.Load<AudioClip>("Audio/Menu off");
+                optionSound.Play();
+                MenuUi.SetActive(true);
+                QuitUI.SetActive(false);
             }
 
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                StartCoroutine("FadeIn");
+                Application.Quit();
             }
         }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                optionIndex -= 1;
-                if (optionIndex < 0) optionIndex = 6;
-                SelectedBox();
-            }
-
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                optionIndex += 1;
-                if (optionIndex > 6) optionIndex = 0;
-                SelectedBox();
-            }
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                OptionOptimize(-1);
-                SaveOption();
-            }
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                OptionOptimize(1);
-                SaveOption();
-            }
-        }
-        OptionBox();
     }
 }
