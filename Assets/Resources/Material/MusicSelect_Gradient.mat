@@ -89,8 +89,8 @@ Material:
     - _UseUIAlphaClip: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.87999946, g: 0.7171998, b: 0.04136001, a: 1}
-    - _Color2: {r: 0.87999946, g: 0.4549596, b: 0.4831203, a: 1}
+    - _Color: {r: 0.27, g: 0.22004993, b: 0.012690002, a: 1}
+    - _Color2: {r: 0.27, g: 0.13959002, b: 0.14823, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
