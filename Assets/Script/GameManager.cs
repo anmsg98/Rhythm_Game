@@ -43,6 +43,11 @@ public class GameManager : MonoBehaviour
     private TMP_Text judgeText;
     private string judge;
     private Animator judgementAnimator;
+
+    public GameObject bgaOff;
+    public Transform inGameUI;
+    public TMP_Text[] JudgeValue;
+    private int Under90;
     
     public GameObject objectPooler;
     public enum judges
@@ -148,7 +153,7 @@ public class GameManager : MonoBehaviour
                 MusicSelect.instance.noteSpeed += 1f;
             }*/
 
-            if (Input.GetKeyDown(KeyCode.Insert))
+            if (Input.GetKeyDown(KeyCode.PageUp))
             {
                 if (videoColor < 255)
                 {
@@ -159,7 +164,7 @@ public class GameManager : MonoBehaviour
                 videoBackGround.color = new Color32(videoColor, videoColor, videoColor, 255);
             }
 
-            if (Input.GetKeyDown(KeyCode.Delete))
+            if (Input.GetKeyDown(KeyCode.PageDown))
             {
                 if (videoColor > 0)
                 {
@@ -168,6 +173,18 @@ public class GameManager : MonoBehaviour
                 }
 
                 videoBackGround.color = new Color32(videoColor, videoColor, videoColor, 255);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                if (bgaOff.activeInHierarchy)
+                {
+                    bgaOff.SetActive(false);
+                }
+                else
+                {
+                    bgaOff.SetActive(true);
+                }
             }
         }
 
@@ -275,6 +292,18 @@ public class GameManager : MonoBehaviour
             combo++;
         }
 
+        Under90 = 0;
+        for (int i = 2; i < 11; i++)
+        {
+            Under90 += PlayData.HitScore[i];
+        }
+
+        JudgeValue[0].text = PlayData.HitScore[11].ToString();
+        JudgeValue[1].text = Under90.ToString();
+        JudgeValue[2].text = PlayData.HitScore[1].ToString();
+        JudgeValue[3].text = PlayData.HitScore[0].ToString();
+        JudgeValue[3].text = PlayData.HitScore[0].ToString();
+            
         percent = rate / noteCount;
         comboText.text = $"<size=100%>combo\n<size=200%>{combo.ToString()}";
         rateText.text = $"<size=80%>RATE</size>  <b>{percent.ToString("N2")}%";
@@ -285,26 +314,31 @@ public class GameManager : MonoBehaviour
     private void GearOptimize()
     {
         int pos = MusicSelect.instance.gearPosition;
+        
+        if (pos == 0)
+        {
+            inGameUI.position = new Vector3(inGameUI.position.x + 6f, inGameUI.position.y, inGameUI.position.z);
+        }
 
         gearPosition.position =
-            new Vector3(gearPosition.position.x + (pos * 5.77f), gearPosition.position.y, gearPosition.position.z);
+            new Vector3(gearPosition.position.x + (pos * 6f), gearPosition.position.y, gearPosition.position.z);
         
         rateUI.transform.position =
-            new Vector3(rateUI.transform.position.x + (pos * 5.77f), rateUI.transform.position.y,
+            new Vector3(rateUI.transform.position.x + (pos * 6f), rateUI.transform.position.y,
                 rateUI.transform.position.z);
         
         comboUI.transform.position =
-            new Vector3(comboUI.transform.position.x + (pos * 5.77f), comboUI.transform.position.y,
+            new Vector3(comboUI.transform.position.x + (pos * 6f), comboUI.transform.position.y,
                 comboUI.transform.position.z);
         
         judgementUI.transform.position =
-            new Vector3(judgementUI.transform.position.x + (pos * 5.77f), judgementUI.transform.position.y,
+            new Vector3(judgementUI.transform.position.x + (pos * 6f), judgementUI.transform.position.y,
                 judgementUI.transform.position.z);
         
         for (int i = 0; i < 4; i++)
         {
             trails[i].transform.position =
-                new Vector3(trails[i].transform.position.x + (pos * 5.77f), trails[i].transform.position.y,
+                new Vector3(trails[i].transform.position.x + (pos * 6f), trails[i].transform.position.y,
                     trails[i].transform.position.z);
         }
 

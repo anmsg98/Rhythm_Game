@@ -355,6 +355,7 @@ public class MusicSelect : MonoBehaviour
         gearPosition = Convert.ToInt32(line.Split(' ')[1]);
         line = reader.ReadLine();
         rate = Convert.ToInt32(line.Split(' ')[1]);
+        reader.Close();
         
         TMP_Text textValue;
 
