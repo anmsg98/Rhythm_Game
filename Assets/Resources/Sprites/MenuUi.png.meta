@@ -117,7 +117,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MenuUI_0
+      name: MenuUi_0
       rect:
         serializedVersion: 2
         x: 0
@@ -131,14 +131,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 73e8398873e980a4f97111e682226b96
-      internalID: -1371736289
+      spriteID: 184e7cb7cbf16c84bbe102e100a8ffe0
+      internalID: 1442702350
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MenuUI_1
+      name: MenuUi_1
       rect:
         serializedVersion: 2
         x: 528
@@ -152,14 +152,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0c7dd6863be97d949aadbdea75ba914c
-      internalID: -1596443471
+      spriteID: d8653081d7248364db1532a6a382c2d0
+      internalID: -1533853025
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MenuUI_2
+      name: MenuUi_2
       rect:
         serializedVersion: 2
         x: 1067
@@ -173,14 +173,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d27670d3ede944243895db8f670c8b44
-      internalID: -1383715202
+      spriteID: 78c5a20833bbbda48b0a808d277c49eb
+      internalID: 1359310914
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MenuUI_3
+      name: MenuUi_3
       rect:
         serializedVersion: 2
         x: 1606
@@ -194,14 +194,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6323656a960922445b127f03a41636e8
-      internalID: 39772684
+      spriteID: 3810d9e4b2db0f54980aeb420a955a50
+      internalID: 1667583537
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MenuUI_4
+      name: MenuUi_4
       rect:
         serializedVersion: 2
         x: 0
@@ -215,14 +215,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7b656ce507e46094ba2008413cc6d409
-      internalID: -509184889
+      spriteID: a21ef3040aa4f1e4a9059b8bd8767c44
+      internalID: -1672294771
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MenuUI_5
+      name: MenuUi_5
       rect:
         serializedVersion: 2
         x: 530
@@ -236,14 +236,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ac9bce9cdbc867f46934fb3f4b084bc5
-      internalID: 1668882837
+      spriteID: 80d2d00f10cb9bf4bb43324c05fc0231
+      internalID: -1743692090
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MenuUI_6
+      name: MenuUi_6
       rect:
         serializedVersion: 2
         x: 1069
@@ -257,14 +257,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a8827ad93bcc70946869aad3d231a5fe
-      internalID: -885525486
+      spriteID: 535731e832726ce4e8c3716b75622867
+      internalID: -1649757117
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MenuUI_7
+      name: MenuUi_7
       rect:
         serializedVersion: 2
         x: 1608
@@ -278,14 +278,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 055aa62cd7baf2641aa2b142caf7c46d
-      internalID: 2108510756
+      spriteID: f2db3a6fb121a3341b0199f54089eb37
+      internalID: -1088273775
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MenuUI_8
+      name: MenuUi_8
       rect:
         serializedVersion: 2
         x: 2
@@ -299,14 +299,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: adc67643936f3594faeea9a93052afa4
-      internalID: -1404485373
+      spriteID: c1cb0edb8833e4e4b9ef9dd38334de34
+      internalID: 1877984635
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MenuUI_9
+      name: MenuUi_9
       rect:
         serializedVersion: 2
         x: 530
@@ -320,14 +320,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eafa51585ce278d42b85043960778f6c
-      internalID: -852605049
+      spriteID: 47016da2c83bef84f915fb93c198eee9
+      internalID: 2000225399
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MenuUI_10
+      name: MenuUi_10
       rect:
         serializedVersion: 2
         x: 1069
@@ -341,8 +341,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 96598f8a1494c4c4d8a9b539ff4437e8
-      internalID: -1918406134
+      spriteID: 0caa6de482365da42b0aba4ff27880b5
+      internalID: -1555118307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MenuUi_11
+      rect:
+        serializedVersion: 2
+        x: 1608
+        y: 23
+        width: 400
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f6bfb22c7815ce4496f06eec94c3e87
+      internalID: -19740647
       vertices: []
       indices: 
       edges: []
@@ -358,17 +379,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      MenuUI_7: 2108510756
-      MenuUI_4: -509184889
-      MenuUI_6: -885525486
-      MenuUI_1: -1596443471
-      MenuUI_2: -1383715202
-      MenuUI_9: -852605049
-      MenuUI_8: -1404485373
-      MenuUI_5: 1668882837
-      MenuUI_0: -1371736289
-      MenuUI_10: -1918406134
-      MenuUI_3: 39772684
+      MenuUi_9: 2000225399
+      MenuUi_0: 1442702350
+      MenuUi_6: -1649757117
+      MenuUi_4: -1672294771
+      MenuUi_5: -1743692090
+      MenuUi_8: 1877984635
+      MenuUi_11: -19740647
+      MenuUi_2: 1359310914
+      MenuUi_10: -1555118307
+      MenuUi_3: 1667583537
+      MenuUi_1: -1533853025
+      MenuUi_7: -1088273775
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

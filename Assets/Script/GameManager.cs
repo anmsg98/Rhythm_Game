@@ -48,7 +48,12 @@ public class GameManager : MonoBehaviour
     public Transform inGameUI;
     public TMP_Text[] JudgeValue;
     private int Under90;
-    
+
+    public GameObject fever;
+    public GameObject feverText;
+    private int feverCount = 1;
+    private int feverGauge;
+
     public GameObject objectPooler;
     public enum judges
     {
@@ -213,86 +218,143 @@ public class GameManager : MonoBehaviour
             PlayData.HitScore[0] += 1; 
             judgeText.text = "<color=#FF0000>BREAK";
             combo = 0;
+            feverGauge = 0;
+            feverCount = 1;
         }
         else if (judge == judges.MAX1)
         {
             PlayData.HitScore[1] += 1; 
             rate += 1f;
             judgeText.text = "<color=#6E7072>MAX 1%";
-            combo++;
+            combo += feverCount;
+            feverGauge++;
         }
         else if (judge == judges.MAX10)
         {
             PlayData.HitScore[2] += 1; 
             rate += 10f;
             judgeText.text = "<color=#1F5A90>MAX 10%";
-            combo++;
+            combo += feverCount;
+            feverGauge++;
         }
         else if (judge == judges.MAX20)
         {
             PlayData.HitScore[3] += 1;
             rate += 20f;
             judgeText.text = "<color=#1F5A90>MAX 20%";
-            combo++;
+            combo += feverCount;
+            feverGauge++;
         }
         else if (judge == judges.MAX30)
         {
             PlayData.HitScore[4] += 1;
             rate += 30f;
             judgeText.text = "<color=#1F5A90>MAX 30%";
-            combo++;
+            combo += feverCount;
+            feverGauge++;
         }
         else if (judge == judges.MAX40)
         {
             PlayData.HitScore[5] += 1;
             rate += 40f;
             judgeText.text = "<color=#1F5A90>MAX 40%";
-            combo++;
+            combo += feverCount;
+            feverGauge++;
         }
         else if (judge == judges.MAX50)
         {
             PlayData.HitScore[6] += 1;
             rate += 50f;
             judgeText.text = "<color=#0BBC00>MAX 50%";
-            combo++;
+            combo += feverCount;
+            feverGauge++;
         }
         else if (judge == judges.MAX60)
         {
             PlayData.HitScore[7] += 1;
             rate += 60f;
             judgeText.text = "<color=#0BBC00>MAX 60%";
-            combo++;
+            combo += feverCount;
+            feverGauge++;
         }
         else if (judge == judges.MAX70)
         {
             PlayData.HitScore[8] += 1;
             rate += 70f;
             judgeText.text = "<color=#0BBC00>MAX 70%";
-            combo++;
+            combo += feverCount;
+            feverGauge++;
         }
         else if (judge == judges.MAX80)
         {
             PlayData.HitScore[9] += 1;
             rate += 80f;
             judgeText.text = "<color=#3AFF00>MAX 80%";
-            combo++;
+            combo += feverCount;
+            feverGauge++;
         }
         else if (judge == judges.MAX90)
         {
             PlayData.HitScore[10] += 1;
             rate += 90f;
             judgeText.text = "<color=#9FFF00>MAX 90%";
-            combo++;
+            combo += feverCount;
+            feverGauge++;
         }
         else if (judge == judges.MAX100)
         {
             PlayData.HitScore[11] += 1;
             rate += 100f;
             judgeText.text = "<color=#FFFF00>MAX 100%";
-            combo++;
+            combo += feverCount;
+            feverGauge++;
         }
 
         Under90 = 0;
+        
+        SpriteRenderer feverColor = fever.GetComponent<SpriteRenderer>();
+        if (feverCount == 1)
+        {
+            feverColor.color = new Color(150f / 255f, 150f / 255f, 150f / 255f);
+            feverText.GetComponent<TMP_Text>().color = new Color(150f / 255f, 150f / 255f, 150f / 255f);
+        }
+        else if (feverCount == 2)
+        {
+            feverColor.color = new Color(81f / 255f, 183f / 255f, 203f / 255f);
+            feverText.GetComponent<TMP_Text>().color = new Color(81f / 255f, 183f / 255f, 203f / 255f);
+        }
+        else if (feverCount == 3)
+        {
+            feverColor.color = new Color(61f / 255f, 228f / 255f, 128f / 255f);
+            feverText.GetComponent<TMP_Text>().color = new Color(61f / 255f, 228f / 255f, 128f / 255f);
+        }
+        else if (feverCount == 4)
+        {
+            feverColor.color = new Color(155f / 255f, 226f / 255f, 34f / 255f);
+            feverText.GetComponent<TMP_Text>().color = new Color(155f / 255f, 226f / 255f, 34f / 255f);
+        }
+        else
+        {
+            feverColor.color = new Color(234f / 255f, 224f / 255f, 0f);
+            feverText.GetComponent<TMP_Text>().color = new Color(234f / 255f, 224f / 255f, 0f);
+        }
+        
+        if (feverGauge > 42)
+        {
+            feverGauge = 0;
+            feverCount++;
+            if (feverCount > 5)
+            {
+                feverCount = 5;
+            }
+
+            feverText.GetComponent<TMP_Text>().text = "x" + feverCount.ToString();
+            feverText.GetComponent<Animator>().SetTrigger("SHOW");
+        }
+
+        fever.transform.localScale =
+            new Vector3(feverGauge, fever.transform.localScale.y, fever.transform.localScale.z);
+
         for (int i = 2; i < 11; i++)
         {
             Under90 += PlayData.HitScore[i];

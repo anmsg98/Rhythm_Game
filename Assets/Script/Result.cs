@@ -30,6 +30,8 @@ public class Result : MonoBehaviour
     public TMP_Text hitScore;
     public TMP_Text rate;
 
+    public float graphtime;
+    public float ratetime;
     private void Awake()
     {
         Cursor.visible = false;
@@ -103,8 +105,14 @@ public class Result : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return))
         {
             MusicSelect();
+            StartCoroutine(FadeIn("SelectScene"));
         }
         
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            Restart();
+            StartCoroutine(FadeIn("GameScene"));
+        }
     }
 
     void VideoStart()
@@ -121,12 +129,12 @@ public class Result : MonoBehaviour
     {
         if (sliders[0].value < (float)total100 / PlayData.totalNote)
         {
-            sliders[0].value += 0.001f;
+            sliders[0].value += graphtime * Time.deltaTime;
         }
 
         if (sliders[1].value < (float) total90 / PlayData.totalNote)
         {
-            sliders[1].value += 0.001f;
+            sliders[1].value += graphtime * Time.deltaTime;
         }
         else
         {
@@ -150,7 +158,7 @@ public class Result : MonoBehaviour
     {
         if (rateUp < PlayData.rate)
         {
-            rateUp += 0.03f;
+            rateUp += ratetime * Time.deltaTime;
             rate.text = $"{rateUp.ToString("F2")}%";
         }
         else
@@ -174,12 +182,24 @@ public class Result : MonoBehaviour
        {
            PlayData.HitScore[i] = 0;
        }
-       
-       StartCoroutine(FadeIn());
     }
-
+    void Restart()
+    {
+        resultSound.clip = Resources.Load<AudioClip>("Audio/Start");
+        resultSound.Play();
+       
+        PlayData.totalNote = 0;
+        PlayData.combo = 0;
+        PlayData.rate = 0.0f;
+        PlayData.bestCombo = 0;
+        for (int i = 0; i < 12; i++)
+        {
+            PlayData.HitScore[i] = 0;
+        }
+    }
+    
     private Color fadeInColor;
-    public IEnumerator FadeIn()
+    public IEnumerator FadeIn(string Scene)
     {
         while (fadeIn.color.a <= 1.0f)
         {
@@ -187,7 +207,7 @@ public class Result : MonoBehaviour
             fadeInColor.a += 0.01f;
             fadeIn.color = fadeInColor;
         }
-        SceneManager.LoadScene("SelectScene");
+        SceneManager.LoadScene(Scene);
     }
     
     private float[] val = new float[2];

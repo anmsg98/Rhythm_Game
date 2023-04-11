@@ -24,7 +24,7 @@ public class ObjectPooler : MonoBehaviour
                 GameObject obj;
                 
                 obj = Instantiate(Notes[i],
-                        new Vector3(Notes[i].transform.position.x + (MusicSelect.instance.gearPosition * 5.77f), Notes[i].transform.position.y ,Notes[i].transform.position.z),
+                        new Vector3(Notes[i].transform.position.x + (MusicSelect.instance.gearPosition * 6f), Notes[i].transform.position.y ,Notes[i].transform.position.z),
                         Quaternion.identity);
                
                 obj.SetActive(false);
