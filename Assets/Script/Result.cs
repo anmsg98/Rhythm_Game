@@ -2,17 +2,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 using UnityEngine.Video;
+using Cursor = UnityEngine.Cursor;
 using Random = UnityEngine.Random;
+using Slider = UnityEngine.UI.Slider;
 
 public class Result : MonoBehaviour
 {
     public AudioSource resultSound;
     
     public SpriteRenderer fadeIn;
+    private Color fadeInColor;
+    private bool enableSelectFadeIn;
+    private bool enableRestartFadeIn;
     
     private VideoPlayer videoSource;
     public Slider[] sliders;
@@ -102,17 +108,27 @@ public class Result : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Return))
+        if(!enableRestartFadeIn)
         {
-            MusicSelect();
-            StartCoroutine(FadeIn("SelectScene"));
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                resultSound.clip = Resources.Load<AudioClip>("Audio/Enter");
+                resultSound.Play();
+                enableSelectFadeIn = true;
+            }
+        }
+
+        if (!enableSelectFadeIn)
+        {
+            if (Input.GetKeyDown(KeyCode.F5))
+            {
+                resultSound.clip = Resources.Load<AudioClip>("Audio/Start");
+                resultSound.Play();
+                enableRestartFadeIn = true;
+            }
         }
         
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-            Restart();
-            StartCoroutine(FadeIn("GameScene"));
-        }
+        FadeIn();
     }
 
     void VideoStart()
@@ -170,9 +186,6 @@ public class Result : MonoBehaviour
 
     void MusicSelect()
     {
-       resultSound.clip = Resources.Load<AudioClip>("Audio/Enter");
-       resultSound.Play();
-       
        PlayData.totalNote = 0;
        PlayData.combo = 0;
        PlayData.rate = 0.0f;
@@ -182,12 +195,11 @@ public class Result : MonoBehaviour
        {
            PlayData.HitScore[i] = 0;
        }
+
+       SceneManager.LoadScene("SelectScene");
     }
     void Restart()
     {
-        resultSound.clip = Resources.Load<AudioClip>("Audio/Start");
-        resultSound.Play();
-       
         PlayData.totalNote = 0;
         PlayData.combo = 0;
         PlayData.rate = 0.0f;
@@ -196,19 +208,40 @@ public class Result : MonoBehaviour
         {
             PlayData.HitScore[i] = 0;
         }
+        
+        SceneManager.LoadScene("GameScene");
     }
-    
-    private Color fadeInColor;
-    public IEnumerator FadeIn(string Scene)
+
+
+    private void FadeIn()
     {
-        while (fadeIn.color.a <= 1.0f)
+        if (enableSelectFadeIn)
         {
-            yield return new WaitForSeconds( 0.001f );
-            fadeInColor.a += 0.01f;
-            fadeIn.color = fadeInColor;
+            if (fadeIn.color.a < 1.0f)
+            {
+                fadeInColor.a += global::MusicSelect.instance.fadeTime * Time.deltaTime;
+                fadeIn.color = fadeInColor;
+            }
+            else
+            {
+                Invoke("MusicSelect", 2.0f);
+            }
         }
-        SceneManager.LoadScene(Scene);
+
+        if (enableRestartFadeIn)
+        {
+            if (fadeIn.color.a < 1.0f)
+            {
+                fadeInColor.a += global::MusicSelect.instance.fadeTime * Time.deltaTime;
+                fadeIn.color = fadeInColor;
+            }
+            else
+            {
+                Invoke("Restart", 2.0f);
+            }
+        }
     }
+
     
     private float[] val = new float[2];
     void PrintJudgeMent()

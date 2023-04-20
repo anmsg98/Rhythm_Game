@@ -93,7 +93,7 @@ public class NoteController : MonoBehaviour
             }
 
             order = Convert.ToSingle(line.Split(' ')[1]);
-            noteTiming = 8423.1f + (Convert.ToInt32(order) * beatInterval * 44100f);
+            noteTiming = (8423.1f - (MusicSelect.instance.syncTime - 2.4f) * 44100f) + (Convert.ToInt32(order) * beatInterval * 44100f);
             Note note = new Note(notetype, order, noteTiming);
             orderList.Add(order);
             notes.Add(note);
@@ -129,7 +129,7 @@ public class NoteController : MonoBehaviour
         _time = new WaitForSeconds(startingPoint + order * beatInterval + 8.0f);
 
         yield return _time;
-        StartCoroutine(GameManager.instance.FadeIn());
+        GameManager.instance.enableFadeIn = true;
     }
 
     private int cnt = 0;

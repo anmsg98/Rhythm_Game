@@ -25,8 +25,11 @@ public class GameManager : MonoBehaviour
     public float startTime;
     
     public float judgeTime;
-
+    public bool judgeStart;
+    
     public SpriteRenderer fadeIn;
+    public bool enableFadeIn;
+    Color fadeInColor;
     
     public GameObject rateUI;
     private TMP_Text rateText;
@@ -107,14 +110,16 @@ public class GameManager : MonoBehaviour
         videoSource.clip = videoClip;
         videoSource.audioOutputMode = VideoAudioOutputMode.None;
         
-        yield return new WaitForSeconds(2.4f);
+        yield return new WaitForSeconds(MusicSelect.instance.syncTime);
         audioSource.Play();
         videoSource.Play();
+        judgeStart = true;
     }
-
+    
     void Start()
     {
         StartCoroutine("MusicStart");
+        ChangeFeverColor();
         GearOptimize();
        
         comboText = comboUI.GetComponent<TMP_Text>();
@@ -193,6 +198,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        FeverSystem();
+        FadeIn();
         Pause();
     }
 
@@ -215,6 +222,8 @@ public class GameManager : MonoBehaviour
         noteCount++;
         if (judge == judges.Break)
         {
+            ChangeFeverColor();
+            feverText.transform.GetChild(1).gameObject.SetActive(false);
             PlayData.HitScore[0] += 1; 
             judgeText.text = "<color=#FF0000>BREAK";
             combo = 0;
@@ -311,49 +320,9 @@ public class GameManager : MonoBehaviour
         }
 
         Under90 = 0;
-        
-        SpriteRenderer feverColor = fever.GetComponent<SpriteRenderer>();
-        if (feverCount == 1)
-        {
-            feverColor.color = new Color(150f / 255f, 150f / 255f, 150f / 255f);
-            feverText.GetComponent<TMP_Text>().color = new Color(150f / 255f, 150f / 255f, 150f / 255f);
-        }
-        else if (feverCount == 2)
-        {
-            feverColor.color = new Color(81f / 255f, 183f / 255f, 203f / 255f);
-            feverText.GetComponent<TMP_Text>().color = new Color(81f / 255f, 183f / 255f, 203f / 255f);
-        }
-        else if (feverCount == 3)
-        {
-            feverColor.color = new Color(61f / 255f, 228f / 255f, 128f / 255f);
-            feverText.GetComponent<TMP_Text>().color = new Color(61f / 255f, 228f / 255f, 128f / 255f);
-        }
-        else if (feverCount == 4)
-        {
-            feverColor.color = new Color(155f / 255f, 226f / 255f, 34f / 255f);
-            feverText.GetComponent<TMP_Text>().color = new Color(155f / 255f, 226f / 255f, 34f / 255f);
-        }
-        else
-        {
-            feverColor.color = new Color(234f / 255f, 224f / 255f, 0f);
-            feverText.GetComponent<TMP_Text>().color = new Color(234f / 255f, 224f / 255f, 0f);
-        }
-        
-        if (feverGauge > 42)
-        {
-            feverGauge = 0;
-            feverCount++;
-            if (feverCount > 5)
-            {
-                feverCount = 5;
-            }
+        if(MusicSelect.instance.fever != 2) FeverSystem();
 
-            feverText.GetComponent<TMP_Text>().text = "x" + feverCount.ToString();
-            feverText.GetComponent<Animator>().SetTrigger("SHOW");
-        }
-
-        fever.transform.localScale =
-            new Vector3(feverGauge, fever.transform.localScale.y, fever.transform.localScale.z);
+        
 
         for (int i = 2; i < 11; i++)
         {
@@ -373,6 +342,95 @@ public class GameManager : MonoBehaviour
         judgementAnimator.SetTrigger("SHOW");
     }
 
+    private void ChangeFeverColor()
+    {
+        SpriteRenderer feverColor = fever.GetComponent<SpriteRenderer>();
+        if (feverCount == 1)
+        {
+            feverColor.color = new Color(150f / 255f, 150f / 255f, 150f / 255f);
+            feverText.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(150f / 255f, 150f / 255f, 150f / 255f);
+        }
+        else if (feverCount == 2)
+        {
+            feverColor.color = new Color(81f / 255f, 183f / 255f, 203f / 255f);
+            feverText.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(81f / 255f, 183f / 255f, 203f / 255f);
+        }
+        else if (feverCount == 3)
+        {
+            feverColor.color = new Color(61f / 255f, 228f / 255f, 128f / 255f);
+            feverText.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(61f / 255f, 228f / 255f, 128f / 255f);
+        }
+        else if (feverCount == 4)
+        {
+            feverColor.color = new Color(155f / 255f, 226f / 255f, 34f / 255f);
+            feverText.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(155f / 255f, 226f / 255f, 34f / 255f);
+        }
+        else
+        {
+            feverColor.color = new Color(234f / 255f, 224f / 255f, 0f);
+            feverText.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(234f / 255f, 224f / 255f, 0f);
+        }
+    }
+
+    private void FeverSystem()
+    {
+        if (feverGauge <= 42)
+        {
+            fever.transform.localScale =
+                new Vector3(feverGauge, fever.transform.localScale.y, fever.transform.localScale.z);
+        }
+
+        if (feverGauge > 42)
+        {
+            if (feverGauge < 44)
+            {
+                feverText.transform.GetChild(1).gameObject.SetActive(true);
+                feverText.transform.GetChild(1).gameObject.GetComponent<Animator>().SetTrigger("SHOW");
+            }
+
+            if (MusicSelect.instance.fever == 0)
+            {
+                fever.GetComponent<AudioSource>().Play();
+                feverGauge = 0;
+                feverCount++;
+                if (feverCount > 5)
+                {
+                    feverCount = 5;
+                }
+
+                ChangeFeverColor();
+                feverText.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "x" + feverCount.ToString();
+                feverText.transform.GetChild(0).gameObject.GetComponent<Animator>().SetTrigger("SHOW");
+                feverText.transform.GetChild(1).gameObject.GetComponent<Animator>().SetTrigger("OUT");
+                Invoke("FeverGlowOut", 1f);
+            }
+            
+            else if (MusicSelect.instance.fever == 1)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    fever.GetComponent<AudioSource>().Play();
+                    feverGauge = 0;
+                    feverCount++;
+                    if (feverCount > 5)
+                    {
+                        feverCount = 5;
+                    }
+
+                    ChangeFeverColor();
+                    feverText.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "x" + feverCount.ToString();
+                    feverText.transform.GetChild(0).gameObject.GetComponent<Animator>().SetTrigger("SHOW");
+                    feverText.transform.GetChild(1).gameObject.GetComponent<Animator>().SetTrigger("OUT");
+                    Invoke("FeverGlowOut", 1f);
+                }
+            }
+        }
+    }
+
+    private void FeverGlowOut()
+    {
+        feverText.transform.GetChild(1).gameObject.SetActive(false);
+    }
     private void GearOptimize()
     {
         int pos = MusicSelect.instance.gearPosition;
@@ -414,18 +472,22 @@ public class GameManager : MonoBehaviour
         else color.a = 1.0f;
         rateUI.GetComponent<TMP_Text>().color = color;
     }
-
-    Color fadeInColor;
-    public IEnumerator FadeIn()
+    
+    private void FadeIn()
     {
-        while (fadeIn.color.a <= 1.0f)
+        if (enableFadeIn)
         {
-            yield return new WaitForSeconds( 0.001f );
-            fadeInColor.a += 0.01f;
-            fadeIn.color = fadeInColor;
+            if (fadeIn.color.a < 1.0f)
+            {
+                fadeInColor.a += MusicSelect.instance.fadeTime * Time.deltaTime;
+                fadeIn.color = fadeInColor;
+            }
+
+            else
+            {
+                Invoke("Result", 2.0f);
+            }
         }
-        Result();
-        SceneManager.LoadScene("ResultScene");
     }
 
     public void Pause()
@@ -517,6 +579,7 @@ public class GameManager : MonoBehaviour
         PlayData.rate = percent;
         PlayData.totalNote = noteCount;
         PlayData.bestCombo = combo;
+        SceneManager.LoadScene("ResultScene");
     }
     
 }

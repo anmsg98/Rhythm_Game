@@ -67,53 +67,57 @@ public class NoteBehavior : MonoBehaviour
     
     void CheckJudgeMent()
     {
-        if (judgeSection <= detailedJudgment * 3f)
+        if (GameManager.instance.judgeStart)
         {
-            if (judgeSection >= detailedJudgment * 2.8f && judgeSection < detailedJudgment * 3f)
+            if (judgeSection <= detailedJudgment * 3f)
             {
-                judge = GameManager.judges.MAX1;
-            }
-            else if (judgeSection >= detailedJudgment * 2.6f && judgeSection < detailedJudgment * 2.8f)
-            {
-                judge = GameManager.judges.MAX10;
-            }
-            else if (judgeSection >= detailedJudgment * 2.4f && judgeSection < detailedJudgment * 2.6f)
-            {
-                judge = GameManager.judges.MAX20;
-            }
-            else if (judgeSection >= detailedJudgment * 2.2f && judgeSection < detailedJudgment * 2.4f)
-            {
-                judge = GameManager.judges.MAX30;
-            }
-            else if (judgeSection >= detailedJudgment * 2.0f && judgeSection < detailedJudgment * 2.2f)
-            {
-                judge = GameManager.judges.MAX40;
-            }
-            else if (judgeSection >= detailedJudgment * 1.8f && judgeSection < detailedJudgment * 2.0f)
-            {
-                judge = GameManager.judges.MAX50;
-            }
-            else if (judgeSection >= detailedJudgment * 1.6f && judgeSection < detailedJudgment * 1.8f)
-            {
-                judge = GameManager.judges.MAX60;
-            }
-            else if (judgeSection >= detailedJudgment * 1.4f && judgeSection < detailedJudgment * 1.6f)
-            {
-                judge = GameManager.judges.MAX70;
-            }
-            else if (judgeSection >= detailedJudgment * 1.2f && judgeSection < detailedJudgment * 1.4f)
-            {
-                judge = GameManager.judges.MAX80;
-            }
-            else if (judgeSection >= detailedJudgment * 1.0f && judgeSection < detailedJudgment * 1.2f)
-            {
-                judge = GameManager.judges.MAX90;
-            }
-            else if (judgeSection < detailedJudgment)
-            {
-                judge = GameManager.judges.MAX100;
+                if (judgeSection >= detailedJudgment * 2.8f && judgeSection < detailedJudgment * 3f)
+                {
+                    judge = GameManager.judges.MAX1;
+                }
+                else if (judgeSection >= detailedJudgment * 2.6f && judgeSection < detailedJudgment * 2.8f)
+                {
+                    judge = GameManager.judges.MAX10;
+                }
+                else if (judgeSection >= detailedJudgment * 2.4f && judgeSection < detailedJudgment * 2.6f)
+                {
+                    judge = GameManager.judges.MAX20;
+                }
+                else if (judgeSection >= detailedJudgment * 2.2f && judgeSection < detailedJudgment * 2.4f)
+                {
+                    judge = GameManager.judges.MAX30;
+                }
+                else if (judgeSection >= detailedJudgment * 2.0f && judgeSection < detailedJudgment * 2.2f)
+                {
+                    judge = GameManager.judges.MAX40;
+                }
+                else if (judgeSection >= detailedJudgment * 1.8f && judgeSection < detailedJudgment * 2.0f)
+                {
+                    judge = GameManager.judges.MAX50;
+                }
+                else if (judgeSection >= detailedJudgment * 1.6f && judgeSection < detailedJudgment * 1.8f)
+                {
+                    judge = GameManager.judges.MAX60;
+                }
+                else if (judgeSection >= detailedJudgment * 1.4f && judgeSection < detailedJudgment * 1.6f)
+                {
+                    judge = GameManager.judges.MAX70;
+                }
+                else if (judgeSection >= detailedJudgment * 1.2f && judgeSection < detailedJudgment * 1.4f)
+                {
+                    judge = GameManager.judges.MAX80;
+                }
+                else if (judgeSection >= detailedJudgment * 1.0f && judgeSection < detailedJudgment * 1.2f)
+                {
+                    judge = GameManager.judges.MAX90;
+                }
+                else if (judgeSection < detailedJudgment)
+                {
+                    judge = GameManager.judges.MAX100;
+                }
             }
         }
+        
         else if (transform.position.y <= missJudge.transform.position.y)
         {
             judge = GameManager.judges.Break;
@@ -121,6 +125,7 @@ public class NoteBehavior : MonoBehaviour
             noteJudge = false;
             gameObject.SetActive(false);
         }
+        
     }
 
     public void Initialize()

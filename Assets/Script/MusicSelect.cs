@@ -21,6 +21,8 @@ public class MusicSelect : MonoBehaviour
     private int countMusic;
     
     private Color fadeInColor;
+    private bool enableFadeIn;
+    public int fadeTime;
     
     public Animator musicInfoAnim;
     public Animator optionBoxAnim;
@@ -40,7 +42,7 @@ public class MusicSelect : MonoBehaviour
     public GameObject selectedBox;
     private int optionIndex;
     public float noteSpeed;
-    private int fever;
+    public int fever;
     private int fader;
     public int chaos;
     public int transparency;
@@ -50,6 +52,7 @@ public class MusicSelect : MonoBehaviour
 
     public GameObject QuitUI;
 
+    public float syncTime;
     private void Awake()
     {
         instance = this;
@@ -207,19 +210,21 @@ public class MusicSelect : MonoBehaviour
         }
     }
 
-    IEnumerator FadeIn()
+    private void FadeIn()
     {
-        AudioSource gameStart = GetComponent<AudioSource>();
-        gameStart.clip = Resources.Load<AudioClip>("Audio/Start");
-        gameStart.Play();
-        while (fadeIn.color.a <= 1.0f)
+        if (enableFadeIn)
         {
-            yield return new WaitForSeconds( 0.001f );
-            fadeInColor.a += 0.01f;
-            fadeIn.color = fadeInColor;
+            if (fadeIn.color.a < 1.0f)
+            {
+                fadeInColor.a += fadeTime * Time.deltaTime;
+                fadeIn.color = fadeInColor;
+            }
+            
+            else
+            {
+                Invoke("GameStart", 2.0f);
+            }
         }
-        yield return new WaitForSeconds( 2f );
-        GameStart();
     }
 
     void SelectedBox()
@@ -429,7 +434,10 @@ public class MusicSelect : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
-                    StartCoroutine("FadeIn");
+                    AudioSource gameStart = GetComponent<AudioSource>();
+                    gameStart.clip = Resources.Load<AudioClip>("Audio/Start");
+                    gameStart.Play();
+                    enableFadeIn = true;
                     MenuUi.SetActive(false);
                 }
                 
@@ -440,6 +448,8 @@ public class MusicSelect : MonoBehaviour
                     MenuUi.SetActive(false);
                     QuitUI.SetActive(true);
                 }
+
+                FadeIn();
             }
             else
             {

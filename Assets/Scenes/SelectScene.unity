@@ -793,6 +793,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3063bd5b740ea947868fdd38fdb81d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadeTime: 1
   musicInfoAnim: {fileID: 1882598814}
   optionBoxAnim: {fileID: 849836978}
   Music: {fileID: 3740558037597760146, guid: f9431e00514972f4288e97fc001b74e9, type: 3}
@@ -821,12 +822,14 @@ MonoBehaviour:
   - {fileID: 1709597456}
   selectedBox: {fileID: 730429624}
   noteSpeed: 15
+  fever: 0
   chaos: 0
   transparency: 0
   transparecyScroll: {fileID: 204801620}
   gearPosition: -1
   rate: 0
   QuitUI: {fileID: 827702394}
+  syncTime: 2.5
 --- !u!328 &177830236
 VideoPlayer:
   m_ObjectHideFlags: 0
