@@ -55,7 +55,7 @@ public class NoteController : MonoBehaviour
         // 곡제목
         Title = reader.ReadLine();
         // 아티스트 정보
-        Artist = reader.ReadLine();
+        PlayData.Artist = reader.ReadLine();
         // bpm 정보
         string beatInformation = reader.ReadLine();
         bpm = Convert.ToInt32(beatInformation.Split(' ')[0]);

@@ -38,17 +38,23 @@ public class Result : MonoBehaviour
 
     public float graphtime;
     public float ratetime;
+
+    public SpriteRenderer musicThumnail;
+    public TMP_Text musicTitle;
+    
     private void Awake()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        transform.GetComponent<VideoPlayer>().targetTexture.Release();
     }
 
     void Start()
     {
         // 임의 변수 배정
         //Test();
-        
+        musicThumnail.sprite = Resources.Load<Sprite>("Sprites/" + PlayData.music + "_T");
+        musicTitle.text = PlayData.music + "\n<size=50%>" + PlayData.Artist;
         VideoStart();
         total100 = PlayData.HitScore[11];
         total90 = PlayData.totalNote - PlayData.HitScore[0];
@@ -70,6 +76,7 @@ public class Result : MonoBehaviour
     void Test()
     {
         PlayData.music = "Angelic Tears";
+        PlayData.Artist = "SHIKI";
         PlayData.combo = 5000;
         for (int i = 0; i < 12; i++)
         {
@@ -190,6 +197,7 @@ public class Result : MonoBehaviour
        PlayData.combo = 0;
        PlayData.rate = 0.0f;
        PlayData.music = "";
+       PlayData.Artist = "";
        PlayData.bestCombo = 0;
        for (int i = 0; i < 12; i++)
        {
@@ -217,6 +225,7 @@ public class Result : MonoBehaviour
     {
         if (enableSelectFadeIn)
         {
+            transform.GetComponent<AudioSource>().volume -= Time.deltaTime;
             if (fadeIn.color.a < 1.0f)
             {
                 fadeInColor.a += global::MusicSelect.instance.fadeTime * Time.deltaTime;
@@ -224,12 +233,13 @@ public class Result : MonoBehaviour
             }
             else
             {
-                Invoke("MusicSelect", 2.0f);
+                Invoke("MusicSelect", 1.3f);
             }
         }
 
         if (enableRestartFadeIn)
         {
+            transform.GetComponent<AudioSource>().volume -= Time.deltaTime * 0.8f;
             if (fadeIn.color.a < 1.0f)
             {
                 fadeInColor.a += global::MusicSelect.instance.fadeTime * Time.deltaTime;

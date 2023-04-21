@@ -21,7 +21,7 @@ public class MusicSelect : MonoBehaviour
     private int countMusic;
     
     private Color fadeInColor;
-    private bool enableFadeIn;
+    private bool enableStartFadeIn;
     public int fadeTime;
     
     public Animator musicInfoAnim;
@@ -29,6 +29,7 @@ public class MusicSelect : MonoBehaviour
     
     public GameObject Music;
     public VideoPlayer videoSource;
+    private float videoVolume = 0.5f;
     public TMP_Text musicInfo;
     public SpriteRenderer coverImage;
     public Image fadeIn;
@@ -49,8 +50,13 @@ public class MusicSelect : MonoBehaviour
     public Scrollbar transparecyScroll;
     public int gearPosition;
     public int rate;
+    public int noteTiming;
+    public Scrollbar noteTimingScroll;
+    public int judgeTiming;
+    public Scrollbar judgeTimingScroll;
 
     public GameObject QuitUI;
+    private bool enableQuitFadeIn;
 
     public float syncTime;
     private void Awake()
@@ -58,6 +64,7 @@ public class MusicSelect : MonoBehaviour
         instance = this;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        transform.GetComponent<VideoPlayer>().targetTexture.Release();
     }
     
     void Start()
@@ -147,7 +154,7 @@ public class MusicSelect : MonoBehaviour
         VideoClip videoClip = Resources.Load<VideoClip>("Video/" + musicList[currentMusic]);
         videoSource = GetComponent<VideoPlayer>();
         videoSource.clip = videoClip;
-        videoSource.SetDirectAudioVolume(0, 0.2f);
+        videoSource.SetDirectAudioVolume(0, 0.5f);
         videoSource.Play();
     }
 
@@ -212,8 +219,10 @@ public class MusicSelect : MonoBehaviour
 
     private void FadeIn()
     {
-        if (enableFadeIn)
+        if (enableStartFadeIn)
         {
+            videoVolume -= Time.deltaTime * 0.2f;
+            videoSource.SetDirectAudioVolume(0, videoVolume);
             if (fadeIn.color.a < 1.0f)
             {
                 fadeInColor.a += fadeTime * Time.deltaTime;
@@ -225,11 +234,27 @@ public class MusicSelect : MonoBehaviour
                 Invoke("GameStart", 2.0f);
             }
         }
+
+        if (enableQuitFadeIn)
+        {
+            videoVolume -= Time.deltaTime * 0.3f;
+            videoSource.SetDirectAudioVolume(0, videoVolume);
+            if (fadeIn.color.a < 1.0f)
+            {
+                fadeInColor.a += fadeTime * Time.deltaTime * 1.4f;
+                fadeIn.color = fadeInColor;
+            }
+            
+            else
+            {
+                Invoke("ReturnTitleScene", 1.3f);
+            }
+        }
     }
 
     void SelectedBox()
     {
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 9; i++)
         {
             if (i == optionIndex)
             {
@@ -240,18 +265,24 @@ public class MusicSelect : MonoBehaviour
                 optionSprite[i].sprite = Resources.Load<Sprite>("Sprites/Option_Bar");
             }
         }
+
         Transform selectPos = selectedBox.GetComponent<Transform>();
         AudioSource selectSound = selectedBox.GetComponent<AudioSource>();
-        
+
         selectSound.Play();
-        
+
         if (optionIndex < 4)
         {
             selectPos.position = new Vector3(selectPos.position.x, 3.6f - (optionIndex * 0.55f), selectPos.position.z);
         }
-        else
+        else if (4 <= optionIndex && optionIndex < 7)
         {
             selectPos.position = new Vector3(selectPos.position.x, 0.4f - ((optionIndex - 4) * 0.55f),
+                selectPos.position.z);
+        }
+        else
+        {
+            selectPos.position = new Vector3(selectPos.position.x, -2.3f - ((optionIndex - 7) * 0.55f),
                 selectPos.position.z);
         }
     }
@@ -339,6 +370,28 @@ public class MusicSelect : MonoBehaviour
             if (rate == 0) textValue.text = "OFF";
             else if (rate == 1) textValue.text = "ON";
         }
+        else if (optionIndex == 7)
+        {
+            noteTiming += value;
+            if (noteTiming < -40) noteTiming = -40;
+            else if (noteTiming > 40) noteTiming = 40;
+
+            noteTimingScroll.value = (noteTiming * 0.0125f) + 0.5f;
+            
+            textValue = optionText[optionIndex].transform.Find("Value").gameObject.GetComponent<TMP_Text>();
+            textValue.text = (noteTiming * 5).ToString() + " ms";
+        }
+        else if (optionIndex == 8)
+        {
+            judgeTiming += value;
+            if (judgeTiming < -10) judgeTiming = -10;
+            else if (judgeTiming > 10) judgeTiming = 10;
+            
+            judgeTimingScroll.value = (judgeTiming * 0.05f) + 0.5f;
+            
+            textValue = optionText[optionIndex].transform.Find("Value").gameObject.GetComponent<TMP_Text>();
+            textValue.text = judgeTiming.ToString();
+        }
     }
 
     void Initialize()
@@ -360,6 +413,10 @@ public class MusicSelect : MonoBehaviour
         gearPosition = Convert.ToInt32(line.Split(' ')[1]);
         line = reader.ReadLine();
         rate = Convert.ToInt32(line.Split(' ')[1]);
+        line = reader.ReadLine();
+        noteTiming = Convert.ToInt32(line.Split(' ')[1]);
+        line = reader.ReadLine();
+        judgeTiming = Convert.ToInt32(line.Split(' ')[1]);
         reader.Close();
         
         TMP_Text textValue;
@@ -394,6 +451,14 @@ public class MusicSelect : MonoBehaviour
         textValue = optionText[6].transform.Find("Value").gameObject.GetComponent<TMP_Text>();
         if (rate == 0) textValue.text = "OFF";
         else if (rate == 1) textValue.text = "ON";
+
+        noteTimingScroll.value = (noteTiming * 0.0125f) + 0.5f;
+        textValue = optionText[7].transform.Find("Value").gameObject.GetComponent<TMP_Text>();
+        textValue.text = (noteTiming * 5).ToString() + " ms";
+        
+        judgeTimingScroll.value = (judgeTiming * 0.05f) + 0.5f;
+        textValue = optionText[8].transform.Find("Value").gameObject.GetComponent<TMP_Text>();
+        textValue.text = judgeTiming.ToString();
     }
 
     void SaveOption()
@@ -407,6 +472,8 @@ public class MusicSelect : MonoBehaviour
         writer.WriteLine("transparency " + transparency.ToString());
         writer.WriteLine("gearPosition " + gearPosition.ToString());
         writer.WriteLine("rate " + rate.ToString());
+        writer.WriteLine("noteTiming " + noteTiming.ToString());
+        writer.WriteLine("judgeTiming " + judgeTiming.ToString());
         writer.Close();
     }
     
@@ -415,55 +482,64 @@ public class MusicSelect : MonoBehaviour
         PlayData.music = musicList[currentMusic];
         SceneManager.LoadScene("GameScene");
     }
+
+    void ReturnTitleScene()
+    {
+        SceneManager.LoadScene("TitleScene");
+    }
     
     void Update()
     {
+        FadeIn();
+        
         if (!QuitUI.activeInHierarchy)
         {
             if (optionBoxAnim.GetBool("IN_OUT") == false)
             {
-                if (Input.GetKeyDown(KeyCode.UpArrow))
-                {
-                    UpScroll();
-                }
-
-                if (Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    DownScroll();
-                }
-
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
                     AudioSource gameStart = GetComponent<AudioSource>();
                     gameStart.clip = Resources.Load<AudioClip>("Audio/Start");
                     gameStart.Play();
-                    enableFadeIn = true;
+                    enableStartFadeIn = true;
                     MenuUi.SetActive(false);
-                }
-                
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    optionSound.clip = Resources.Load<AudioClip>("Audio/Menu off");
-                    optionSound.Play();
-                    MenuUi.SetActive(false);
-                    QuitUI.SetActive(true);
                 }
 
-                FadeIn();
+                if (!enableStartFadeIn)
+                {
+                    if (Input.GetKeyDown(KeyCode.Escape))
+                    {
+                        optionSound.clip = Resources.Load<AudioClip>("Audio/Menu off");
+                        optionSound.Play();
+                        MenuUi.SetActive(false);
+                        QuitUI.SetActive(true);
+                    }
+                    
+                    if (Input.GetKeyDown(KeyCode.UpArrow))
+                    {
+                        UpScroll();
+                    }
+
+                    if (Input.GetKeyDown(KeyCode.DownArrow))
+                    {
+                        DownScroll();
+                    }
+                }
             }
             else
             {
+                
                 if (Input.GetKeyDown(KeyCode.UpArrow))
                 {
                     optionIndex -= 1;
-                    if (optionIndex < 0) optionIndex = 6;
+                    if (optionIndex < 0) optionIndex = 8;
                     SelectedBox();
                 }
 
                 if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
                     optionIndex += 1;
-                    if (optionIndex > 6) optionIndex = 0;
+                    if (optionIndex > 8) optionIndex = 0;
                     SelectedBox();
                 }
 
@@ -479,9 +555,11 @@ public class MusicSelect : MonoBehaviour
                     SaveOption();
                 }
             }
-            
-            OptionBox();
-            
+
+            if (!enableStartFadeIn)
+            {
+                OptionBox();
+            }
         }
         else
         {
@@ -495,7 +573,9 @@ public class MusicSelect : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                Application.Quit();
+                optionSound.clip = Resources.Load<AudioClip>("Audio/Menu off");
+                optionSound.Play();
+                enableQuitFadeIn = true;
             }
         }
     }

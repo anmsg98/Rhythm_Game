@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,9 +9,13 @@ public class Warning : MonoBehaviour
     public SpriteRenderer fadeIn;
     private Color fadeInColor;
     private bool enableFadeIn;
+    private float timeCount;
     private void Awake()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         fadeInColor = fadeIn.color;
+        Application.targetFrameRate = 400;
     }
 
     void Start()
@@ -36,7 +41,7 @@ public class Warning : MonoBehaviour
         {
             if (fadeIn.color.a < 1.0f)
             {
-                fadeInColor.a += Time.deltaTime;
+                fadeInColor.a += Time.deltaTime * 1.2f;
                 fadeIn.color = fadeInColor;
             }
 
@@ -51,6 +56,14 @@ public class Warning : MonoBehaviour
     {
         FadeOut();
         FadeIn();
+        
+        timeCount += Time.deltaTime;
+        
+        if (timeCount >= 7.0f)
+        {
+            enableFadeIn = true;
+        }
+        
         if (Input.anyKeyDown)
         {
             enableFadeIn = true;

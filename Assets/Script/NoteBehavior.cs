@@ -116,15 +116,22 @@ public class NoteBehavior : MonoBehaviour
                     judge = GameManager.judges.MAX100;
                 }
             }
+            else
+            {
+                if (noteTiming < Convert.ToSingle(GameManager.instance.audioSource.timeSamples))
+                {
+                    judge = GameManager.judges.Break;
+                    GameManager.instance.ProcessJudge(judge);
+                    noteJudge = false;
+                    gameObject.SetActive(false);
+                }
+            }
         }
         
-        else if (transform.position.y <= missJudge.transform.position.y)
-        {
-            judge = GameManager.judges.Break;
-            GameManager.instance.ProcessJudge(judge);
-            noteJudge = false;
-            gameObject.SetActive(false);
-        }
+        // if (transform.position.y <= missJudge.transform.position.y)
+        // {
+        //     
+        // }
         
     }
 

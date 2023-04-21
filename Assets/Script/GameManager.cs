@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
         else if (instance != this) Destroy(gameObject);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-
+        transform.GetComponent<VideoPlayer>().targetTexture.Release();
     }
 
     public float startTime;
@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text[] JudgeValue;
     private int Under90;
 
+    public GameObject feverBackground;
     public GameObject fever;
     public GameObject feverText;
     private int feverCount = 1;
@@ -187,6 +188,7 @@ public class GameManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Delete))
             {
+                colorChageSound.Play();
                 if (bgaOff.activeInHierarchy)
                 {
                     bgaOff.SetActive(false);
@@ -344,6 +346,10 @@ public class GameManager : MonoBehaviour
 
     private void ChangeFeverColor()
     {
+        if (MusicSelect.instance.fever == 2)
+        {
+            feverBackground.SetActive(false);
+        }
         SpriteRenderer feverColor = fever.GetComponent<SpriteRenderer>();
         if (feverCount == 1)
         {
@@ -374,40 +380,23 @@ public class GameManager : MonoBehaviour
 
     private void FeverSystem()
     {
-        if (feverGauge <= 42)
+        if (MusicSelect.instance.fever != 2)
         {
-            fever.transform.localScale =
-                new Vector3(feverGauge, fever.transform.localScale.y, fever.transform.localScale.z);
-        }
-
-        if (feverGauge > 42)
-        {
-            if (feverGauge < 44)
+            if (feverGauge <= 42)
             {
-                feverText.transform.GetChild(1).gameObject.SetActive(true);
-                feverText.transform.GetChild(1).gameObject.GetComponent<Animator>().SetTrigger("SHOW");
+                fever.transform.localScale =
+                    new Vector3(feverGauge, fever.transform.localScale.y, fever.transform.localScale.z);
             }
 
-            if (MusicSelect.instance.fever == 0)
+            if (feverGauge > 42)
             {
-                fever.GetComponent<AudioSource>().Play();
-                feverGauge = 0;
-                feverCount++;
-                if (feverCount > 5)
+                if (feverGauge < 44)
                 {
-                    feverCount = 5;
+                    feverText.transform.GetChild(1).gameObject.SetActive(true);
+                    feverText.transform.GetChild(1).gameObject.GetComponent<Animator>().SetTrigger("SHOW");
                 }
 
-                ChangeFeverColor();
-                feverText.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "x" + feverCount.ToString();
-                feverText.transform.GetChild(0).gameObject.GetComponent<Animator>().SetTrigger("SHOW");
-                feverText.transform.GetChild(1).gameObject.GetComponent<Animator>().SetTrigger("OUT");
-                Invoke("FeverGlowOut", 1f);
-            }
-            
-            else if (MusicSelect.instance.fever == 1)
-            {
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (MusicSelect.instance.fever == 0)
                 {
                     fever.GetComponent<AudioSource>().Play();
                     feverGauge = 0;
@@ -418,10 +407,32 @@ public class GameManager : MonoBehaviour
                     }
 
                     ChangeFeverColor();
-                    feverText.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "x" + feverCount.ToString();
+                    feverText.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text =
+                        "x" + feverCount.ToString();
                     feverText.transform.GetChild(0).gameObject.GetComponent<Animator>().SetTrigger("SHOW");
                     feverText.transform.GetChild(1).gameObject.GetComponent<Animator>().SetTrigger("OUT");
                     Invoke("FeverGlowOut", 1f);
+                }
+
+                else if (MusicSelect.instance.fever == 1)
+                {
+                    if (Input.GetKeyDown(KeyCode.Space))
+                    {
+                        fever.GetComponent<AudioSource>().Play();
+                        feverGauge = 0;
+                        feverCount++;
+                        if (feverCount > 5)
+                        {
+                            feverCount = 5;
+                        }
+
+                        ChangeFeverColor();
+                        feverText.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text =
+                            "x" + feverCount.ToString();
+                        feverText.transform.GetChild(0).gameObject.GetComponent<Animator>().SetTrigger("SHOW");
+                        feverText.transform.GetChild(1).gameObject.GetComponent<Animator>().SetTrigger("OUT");
+                        Invoke("FeverGlowOut", 1f);
+                    }
                 }
             }
         }
@@ -533,12 +544,19 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 if (pauseMenuIndex == 0)
+                {
+                    playDataInitialize();
                     SceneManager.LoadScene("GameScene");
+                }
                 else if (pauseMenuIndex == 1)
+                {
+                    playDataInitialize();
                     SceneManager.LoadScene("SelectScene");
+                }
                 else
                 {
-                    Application.Quit();
+                    playDataInitialize();
+                    SceneManager.LoadScene("TitleScene");
                 }
             }
         }
@@ -573,6 +591,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void playDataInitialize()
+    {
+        PlayData.totalNote = 0;
+        PlayData.combo = 0;
+        PlayData.rate = 0f;
+        PlayData.bestCombo = 0;
+        for (int i = 0; i < 12; i++)
+        {
+            PlayData.HitScore[i] = 0;
+        }
+    }
+    
     public void Result()
     {
         PlayData.combo = combo;
