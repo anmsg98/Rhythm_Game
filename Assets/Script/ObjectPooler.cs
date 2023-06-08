@@ -10,7 +10,7 @@ public class ObjectPooler : MonoBehaviour
 {
     public List<GameObject> Notes;
     private List<List<GameObject>> poolsOfNotes;
-    public int noteCount = 10;
+    public int noteCount;
     private bool more = true;
     
     void Start()

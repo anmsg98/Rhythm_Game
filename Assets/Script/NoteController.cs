@@ -12,13 +12,16 @@ public class NoteController : MonoBehaviour
 {
     class Note
     {
-        public int noteType { get; set; } 
+        public int noteType { get; set; }
+
+        public int longNote { get; set; }
         public float order { get; set; }
         public float noteTiming { get; set; }
         
-        public Note(int noteType, float order, float noteTiming)
+        public Note(int noteType, int longNote, float order, float noteTiming)
         {
             this.noteType = noteType;
+            this.longNote = longNote;
             this.order = order;
             this.noteTiming = noteTiming;
         }
@@ -67,6 +70,7 @@ public class NoteController : MonoBehaviour
 
         string line;
         int notetype;
+        int longNote;
         float order;
         float noteTiming;
 
@@ -92,9 +96,14 @@ public class NoteController : MonoBehaviour
                 else if (notetype == 4) notetype = lists[3];
             }
 
-            order = Convert.ToSingle(line.Split(' ')[1]);
+            longNote = Convert.ToInt32(line.Split(' ')[1]);
+            if (longNote > 0)
+            {
+                notetype += 4;
+            }
+            order = Convert.ToSingle(line.Split(' ')[2]);
             noteTiming = (8423.1f - (MusicSelect.instance.syncTime - 2.4f) * 44100f) + (Convert.ToInt32(order) * beatInterval * 44100f);
-            Note note = new Note(notetype, order, noteTiming);
+            Note note = new Note(notetype, longNote, order, noteTiming);
             orderList.Add(order);
             notes.Add(note);
             
@@ -137,10 +146,25 @@ public class NoteController : MonoBehaviour
     {
         GameObject obj = noteObjectPooler.getObject(note.noteType);
 
-        x = obj.transform.position.x;
-        z = obj.transform.position.z;
+        if (note.noteType > 4)
+        {
+            x = obj.transform.GetChild(0).gameObject.transform.position.x;
+            z = obj.transform.GetChild(0).gameObject.transform.position.z;
+            
+            obj.transform.GetChild(0).gameObject.transform.position = new Vector3(x, startY + (112.5f / bpm * note.longNote), z);
+            obj.transform.GetChild(1).gameObject.transform.position = new Vector3(x, startY, z);
+            obj.transform.GetChild(2).gameObject.transform.position = new Vector3(x, startY + (112.5f / bpm * note.longNote) / 2, z);
+            obj.transform.GetChild(2).gameObject.transform.localScale = new Vector3(1.24f, (112.5f / bpm * note.longNote), 1);
+        }
 
-        obj.transform.position = new Vector3(x, startY, z);
+        else
+        {
+            x = obj.transform.position.x;
+            z = obj.transform.position.z;
+
+            obj.transform.position = new Vector3(x, startY, z);
+        }
+        
         obj.GetComponent<NoteBehavior>().Initialize();
         obj.GetComponent<NoteBehavior>().notePrior = orderList[cnt];
         obj.GetComponent<NoteBehavior>().noteTiming = note.noteTiming;
