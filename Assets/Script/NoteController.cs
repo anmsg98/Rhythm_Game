@@ -95,15 +95,18 @@ public class NoteController : MonoBehaviour
                 else if (notetype == 3) notetype = lists[2];
                 else if (notetype == 4) notetype = lists[3];
             }
-
+            
             longNote = Convert.ToInt32(line.Split(' ')[1]);
             if (longNote > 0)
             {
                 notetype += 4;
             }
+            
             order = Convert.ToSingle(line.Split(' ')[2]);
             noteTiming = (8423.1f - (MusicSelect.instance.syncTime - 2.4f) * 44100f) + (Convert.ToInt32(order) * beatInterval * 44100f);
-            Note note = new Note(notetype, longNote, order, noteTiming);
+            
+           Note note = new Note(notetype, longNote, order, noteTiming);
+            
             orderList.Add(order);
             notes.Add(note);
             

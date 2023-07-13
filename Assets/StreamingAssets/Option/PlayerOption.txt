@@ -1,5 +1,5 @@
 NoteSpeed 15.0
-fever 0
+fever 1
 fader 0
 chaos 0
 transparency 0

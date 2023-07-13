@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class NoteBehavior : MonoBehaviour
@@ -15,7 +16,10 @@ public class NoteBehavior : MonoBehaviour
     public float notePrior = 0f;
     public float noteTiming;
     public bool noteJudge = false;
-    
+    private bool longPress = true;
+    private bool enableBreak = true;
+    private bool longClick = false;
+
     // 판정구역, 판정 세부조정
     private float judgeSection;
     private float detailedJudgment;
@@ -33,10 +37,10 @@ public class NoteBehavior : MonoBehaviour
     {
         missJudge = GameObject.Find("Miss JudgeLine");
         detailedJudgment = GameManager.instance.judgeTime * 0.001f * 44100f;
-        if (noteType == 1) keyCode = KeyCode.D;
-        if (noteType == 2) keyCode = KeyCode.F;
-        if (noteType == 3) keyCode = KeyCode.L;
-        if (noteType == 4) keyCode = KeyCode.Semicolon;
+        if (noteType == 1 || noteType == 5) keyCode = KeyCode.D;
+        if (noteType == 2 || noteType == 6)  keyCode = KeyCode.F;
+        if (noteType == 3 || noteType == 7)  keyCode = KeyCode.L;
+        if (noteType == 4 || noteType == 8)  keyCode = KeyCode.Semicolon;
     }
 
     // Update is called once per frame
@@ -47,83 +51,181 @@ public class NoteBehavior : MonoBehaviour
             judgeSection = Mathf.Abs(noteTiming - Convert.ToSingle(GameManager.instance.audioSource.timeSamples));
             transform.Translate(Vector3.down * MusicSelect.instance.noteSpeed * Time.deltaTime);
             CheckJudgeMent();
-            KeyInput();
         }
        
     }
 
-    void KeyInput()
+    IEnumerator LongNote()
     {
-        if (Input.GetKeyDown(keyCode))
-        {
-            if (judge != GameManager.judges.NONE && noteJudge)
-            {
-                GameManager.instance.ProcessJudge(judge);
-                noteJudge = false;
-                gameObject.SetActive(false);
-            }
-        }
+        yield return new WaitForSeconds(0.1f);
+        GameManager.instance.feverGauge += 0.5f;
+        GameManager.instance.combo += GameManager.instance.feverCount;
+        GameManager.instance.comboText.text = $"<size=100%>combo\n<size=200%>{GameManager.instance.combo.ToString()}";
+        longPress = true;
     }
     
     void CheckJudgeMent()
     {
-        if (GameManager.instance.judgeStart)
+        if (GameManager.instance.judgeStart && noteJudge)
         {
-            if (judgeSection <= detailedJudgment * 3f)
+            if (noteType < 5)
             {
-                if (judgeSection >= detailedJudgment * 2.8f && judgeSection < detailedJudgment * 3f)
+                if (Input.GetKeyDown(keyCode))
                 {
-                    judge = GameManager.judges.MAX1;
+                    if (judge != GameManager.judges.NONE && noteJudge && noteType < 5)
+                    {
+                        GameManager.instance.ProcessJudge(judge);
+                        GameManager.instance.ShowJudgementAnim();
+                        noteJudge = false;
+                        gameObject.SetActive(false);
+                    }
                 }
-                else if (judgeSection >= detailedJudgment * 2.6f && judgeSection < detailedJudgment * 2.8f)
+
+                if (judgeSection <= detailedJudgment * 3f)
                 {
-                    judge = GameManager.judges.MAX10;
+                    if (judgeSection >= detailedJudgment * 2.8f && judgeSection < detailedJudgment * 3f)
+                    {
+                        judge = GameManager.judges.MAX1;
+                    }
+                    else if (judgeSection >= detailedJudgment * 2.6f && judgeSection < detailedJudgment * 2.8f)
+                    {
+                        judge = GameManager.judges.MAX10;
+                    }
+                    else if (judgeSection >= detailedJudgment * 2.4f && judgeSection < detailedJudgment * 2.6f)
+                    {
+                        judge = GameManager.judges.MAX20;
+                    }
+                    else if (judgeSection >= detailedJudgment * 2.2f && judgeSection < detailedJudgment * 2.4f)
+                    {
+                        judge = GameManager.judges.MAX30;
+                    }
+                    else if (judgeSection >= detailedJudgment * 2.0f && judgeSection < detailedJudgment * 2.2f)
+                    {
+                        judge = GameManager.judges.MAX40;
+                    }
+                    else if (judgeSection >= detailedJudgment * 1.8f && judgeSection < detailedJudgment * 2.0f)
+                    {
+                        judge = GameManager.judges.MAX50;
+                    }
+                    else if (judgeSection >= detailedJudgment * 1.6f && judgeSection < detailedJudgment * 1.8f)
+                    {
+                        judge = GameManager.judges.MAX60;
+                    }
+                    else if (judgeSection >= detailedJudgment * 1.4f && judgeSection < detailedJudgment * 1.6f)
+                    {
+                        judge = GameManager.judges.MAX70;
+                    }
+                    else if (judgeSection >= detailedJudgment * 1.2f && judgeSection < detailedJudgment * 1.4f)
+                    {
+                        judge = GameManager.judges.MAX80;
+                    }
+                    else if (judgeSection >= detailedJudgment * 1.0f && judgeSection < detailedJudgment * 1.2f)
+                    {
+                        judge = GameManager.judges.MAX90;
+                    }
+                    else if (judgeSection < detailedJudgment)
+                    {
+                        judge = GameManager.judges.MAX100;
+                    }
                 }
-                else if (judgeSection >= detailedJudgment * 2.4f && judgeSection < detailedJudgment * 2.6f)
+                else
                 {
-                    judge = GameManager.judges.MAX20;
-                }
-                else if (judgeSection >= detailedJudgment * 2.2f && judgeSection < detailedJudgment * 2.4f)
-                {
-                    judge = GameManager.judges.MAX30;
-                }
-                else if (judgeSection >= detailedJudgment * 2.0f && judgeSection < detailedJudgment * 2.2f)
-                {
-                    judge = GameManager.judges.MAX40;
-                }
-                else if (judgeSection >= detailedJudgment * 1.8f && judgeSection < detailedJudgment * 2.0f)
-                {
-                    judge = GameManager.judges.MAX50;
-                }
-                else if (judgeSection >= detailedJudgment * 1.6f && judgeSection < detailedJudgment * 1.8f)
-                {
-                    judge = GameManager.judges.MAX60;
-                }
-                else if (judgeSection >= detailedJudgment * 1.4f && judgeSection < detailedJudgment * 1.6f)
-                {
-                    judge = GameManager.judges.MAX70;
-                }
-                else if (judgeSection >= detailedJudgment * 1.2f && judgeSection < detailedJudgment * 1.4f)
-                {
-                    judge = GameManager.judges.MAX80;
-                }
-                else if (judgeSection >= detailedJudgment * 1.0f && judgeSection < detailedJudgment * 1.2f)
-                {
-                    judge = GameManager.judges.MAX90;
-                }
-                else if (judgeSection < detailedJudgment)
-                {
-                    judge = GameManager.judges.MAX100;
+                    if (noteTiming < Convert.ToSingle(GameManager.instance.audioSource.timeSamples))
+                    {
+                        judge = GameManager.judges.Break;
+                        GameManager.instance.ProcessJudge(judge);
+                        GameManager.instance.ShowJudgementAnim();
+                        noteJudge = false;
+                        gameObject.SetActive(false);
+                    }
                 }
             }
+            //롱노트 처리
+            
             else
             {
-                if (noteTiming < Convert.ToSingle(GameManager.instance.audioSource.timeSamples))
+                if (Input.GetKeyDown(keyCode))
                 {
-                    judge = GameManager.judges.Break;
-                    GameManager.instance.ProcessJudge(judge);
-                    noteJudge = false;
+                    if (judge != GameManager.judges.NONE && noteJudge && noteType > 4)
+                    {
+                        GameManager.instance.ProcessJudge(judge);
+                    }
+                    enableBreak = false;
+                    longClick = true;
+                }
+                else if (Input.GetKey(keyCode) && longPress)
+                {
+                   longPress = false;
+                   
+                   GameManager.instance.ShowJudgementAnim();
+                   StartCoroutine("LongNote");
+                }
+                
+                else if (Input.GetKeyUp(keyCode) && noteJudge && longClick) 
+                {
                     gameObject.SetActive(false);
+                    enableBreak = true;
+                    noteJudge = false;
+                    longClick = false;
+                }
+
+                if (judgeSection <= detailedJudgment * 3f)
+                {
+                    if (judgeSection >= detailedJudgment * 2.8f && judgeSection < detailedJudgment * 3f)
+                    {
+                        judge = GameManager.judges.MAX1;
+                    }
+                    else if (judgeSection >= detailedJudgment * 2.6f && judgeSection < detailedJudgment * 2.8f)
+                    {
+                        judge = GameManager.judges.MAX10;
+                    }
+                    else if (judgeSection >= detailedJudgment * 2.4f && judgeSection < detailedJudgment * 2.6f)
+                    {
+                        judge = GameManager.judges.MAX20;
+                    }
+                    else if (judgeSection >= detailedJudgment * 2.2f && judgeSection < detailedJudgment * 2.4f)
+                    {
+                        judge = GameManager.judges.MAX30;
+                    }
+                    else if (judgeSection >= detailedJudgment * 2.0f && judgeSection < detailedJudgment * 2.2f)
+                    {
+                        judge = GameManager.judges.MAX40;
+                    }
+                    else if (judgeSection >= detailedJudgment * 1.8f && judgeSection < detailedJudgment * 2.0f)
+                    {
+                        judge = GameManager.judges.MAX50;
+                    }
+                    else if (judgeSection >= detailedJudgment * 1.6f && judgeSection < detailedJudgment * 1.8f)
+                    {
+                        judge = GameManager.judges.MAX60;
+                    }
+                    else if (judgeSection >= detailedJudgment * 1.4f && judgeSection < detailedJudgment * 1.6f)
+                    {
+                        judge = GameManager.judges.MAX70;
+                    }
+                    else if (judgeSection >= detailedJudgment * 1.2f && judgeSection < detailedJudgment * 1.4f)
+                    {
+                        judge = GameManager.judges.MAX80;
+                    }
+                    else if (judgeSection >= detailedJudgment * 1.0f && judgeSection < detailedJudgment * 1.2f)
+                    {
+                        judge = GameManager.judges.MAX90;
+                    }
+                    else if (judgeSection < detailedJudgment)
+                    {
+                        judge = GameManager.judges.MAX100;
+                    }
+                }
+                else
+                {
+                    if ((noteTiming < Convert.ToSingle(GameManager.instance.audioSource.timeSamples)) && enableBreak)
+                    {
+                        judge = GameManager.judges.Break;
+                        GameManager.instance.ProcessJudge(judge);
+                        GameManager.instance.ShowJudgementAnim();
+                        noteJudge = false;
+                        gameObject.SetActive(false);
+                    }
                 }
             }
         }

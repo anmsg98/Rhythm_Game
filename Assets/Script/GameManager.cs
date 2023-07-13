@@ -38,8 +38,8 @@ public class GameManager : MonoBehaviour
     private int noteCount;
 
     public GameObject comboUI;
-    private TMP_Text comboText;
-    private int combo = 0;
+    public TMP_Text comboText;
+    public int combo = 0;
     private Animator comboAnimator;
 
     public GameObject judgementUI;
@@ -55,8 +55,8 @@ public class GameManager : MonoBehaviour
     public GameObject feverBackground;
     public GameObject fever;
     public GameObject feverText;
-    private int feverCount = 1;
-    private int feverGauge;
+    public int feverCount = 1;
+    public float feverGauge;
 
     public GameObject objectPooler;
     public enum judges
@@ -229,103 +229,101 @@ public class GameManager : MonoBehaviour
             PlayData.HitScore[0] += 1; 
             judgeText.text = "<color=#FF0000>BREAK";
             combo = 0;
-            feverGauge = 0;
+            feverGauge = 0f;
             feverCount = 1;
         }
         else if (judge == judges.MAX1)
         {
-            PlayData.HitScore[1] += 1; 
+            PlayData.HitScore[1] += 1;
             rate += 1f;
-            judgeText.text = "<color=#6E7072>MAX 1%";
+            feverGauge += 1f;
             combo += feverCount;
-            feverGauge++;
+            judgeText.text = "<color=#6E7072>MAX 1%";
         }
         else if (judge == judges.MAX10)
         {
             PlayData.HitScore[2] += 1; 
             rate += 10f;
+            feverGauge += 1f;
             judgeText.text = "<color=#1F5A90>MAX 10%";
             combo += feverCount;
-            feverGauge++;
         }
         else if (judge == judges.MAX20)
         {
             PlayData.HitScore[3] += 1;
             rate += 20f;
+            feverGauge += 1f;
             judgeText.text = "<color=#1F5A90>MAX 20%";
             combo += feverCount;
-            feverGauge++;
         }
         else if (judge == judges.MAX30)
         {
             PlayData.HitScore[4] += 1;
             rate += 30f;
+            feverGauge += 1f;
             judgeText.text = "<color=#1F5A90>MAX 30%";
             combo += feverCount;
-            feverGauge++;
         }
         else if (judge == judges.MAX40)
         {
             PlayData.HitScore[5] += 1;
             rate += 40f;
+            feverGauge += 1f;
             judgeText.text = "<color=#1F5A90>MAX 40%";
             combo += feverCount;
-            feverGauge++;
         }
         else if (judge == judges.MAX50)
         {
             PlayData.HitScore[6] += 1;
             rate += 50f;
+            feverGauge += 1f;
             judgeText.text = "<color=#0BBC00>MAX 50%";
             combo += feverCount;
-            feverGauge++;
         }
         else if (judge == judges.MAX60)
         {
             PlayData.HitScore[7] += 1;
             rate += 60f;
+            feverGauge += 1f;
             judgeText.text = "<color=#0BBC00>MAX 60%";
             combo += feverCount;
-            feverGauge++;
         }
         else if (judge == judges.MAX70)
         {
             PlayData.HitScore[8] += 1;
             rate += 70f;
+            feverGauge += 1f;
             judgeText.text = "<color=#0BBC00>MAX 70%";
             combo += feverCount;
-            feverGauge++;
         }
         else if (judge == judges.MAX80)
         {
             PlayData.HitScore[9] += 1;
             rate += 80f;
+            feverGauge += 1f;
             judgeText.text = "<color=#3AFF00>MAX 80%";
             combo += feverCount;
-            feverGauge++;
         }
         else if (judge == judges.MAX90)
         {
             PlayData.HitScore[10] += 1;
             rate += 90f;
+            feverGauge += 1f;
             judgeText.text = "<color=#9FFF00>MAX 90%";
             combo += feverCount;
-            feverGauge++;
         }
         else if (judge == judges.MAX100)
         {
             PlayData.HitScore[11] += 1;
             rate += 100f;
+            feverGauge += 1f;
             judgeText.text = "<color=#FFFF00>MAX 100%";
             combo += feverCount;
-            feverGauge++;
         }
 
         Under90 = 0;
         if(MusicSelect.instance.fever != 2) FeverSystem();
-
         
-
         for (int i = 2; i < 11; i++)
         {
             Under90 += PlayData.HitScore[i];
@@ -340,10 +338,14 @@ public class GameManager : MonoBehaviour
         percent = rate / noteCount;
         comboText.text = $"<size=100%>combo\n<size=200%>{combo.ToString()}";
         rateText.text = $"<size=80%>RATE</size>  <b>{percent.ToString("N2")}%";
+        
+    }
+
+    public void ShowJudgementAnim()
+    {
         comboAnimator.SetTrigger("SHOW");
         judgementAnimator.SetTrigger("SHOW");
     }
-
     private void ChangeFeverColor()
     {
         if (MusicSelect.instance.fever == 2)
@@ -382,15 +384,15 @@ public class GameManager : MonoBehaviour
     {
         if (MusicSelect.instance.fever != 2)
         {
-            if (feverGauge <= 42)
+            if (feverGauge <= 42f)
             {
                 fever.transform.localScale =
                     new Vector3(feverGauge, fever.transform.localScale.y, fever.transform.localScale.z);
             }
 
-            if (feverGauge > 42)
+            if (feverGauge > 42f)
             {
-                if (feverGauge < 44)
+                if (feverGauge < 44f)
                 {
                     feverText.transform.GetChild(1).gameObject.SetActive(true);
                     feverText.transform.GetChild(1).gameObject.GetComponent<Animator>().SetTrigger("SHOW");
@@ -399,7 +401,7 @@ public class GameManager : MonoBehaviour
                 if (MusicSelect.instance.fever == 0)
                 {
                     fever.GetComponent<AudioSource>().Play();
-                    feverGauge = 0;
+                    feverGauge = 0f;
                     feverCount++;
                     if (feverCount > 5)
                     {
@@ -419,7 +421,7 @@ public class GameManager : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.Space))
                     {
                         fever.GetComponent<AudioSource>().Play();
-                        feverGauge = 0;
+                        feverGauge = 0f;
                         feverCount++;
                         if (feverCount > 5)
                         {

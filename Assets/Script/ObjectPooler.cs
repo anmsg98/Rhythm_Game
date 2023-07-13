@@ -85,8 +85,37 @@ public class ObjectPooler : MonoBehaviour
 
         for (int i = 0; i < Notes.Count; i++)
         {
-            int n = arr[i].Min();
-            poolsOfNotes[i][arr[i].IndexOf(n)].GetComponent<NoteBehavior>().noteJudge = true;
+            if (i < 4)
+            {
+                int n = arr[i].Min();
+                int k = arr[i + 4].Min();
+                if (n < k)
+                {
+                    poolsOfNotes[i][arr[i].IndexOf(n)].GetComponent<NoteBehavior>().noteJudge = true;
+                    poolsOfNotes[i + 4][arr[i + 4].IndexOf(k)].GetComponent<NoteBehavior>().noteJudge = false;
+                }
+                else
+                {
+                    poolsOfNotes[i + 4][arr[i + 4].IndexOf(k)].GetComponent<NoteBehavior>().noteJudge = true;
+                    poolsOfNotes[i][arr[i].IndexOf(n)].GetComponent<NoteBehavior>().noteJudge = false;
+                }
+            }
+            else
+            {
+                int n = arr[i].Min();
+                int k = arr[i - 4].Min();
+                if (n < k)
+                {
+                    poolsOfNotes[i][arr[i].IndexOf(n)].GetComponent<NoteBehavior>().noteJudge = true;
+                    poolsOfNotes[i - 4][arr[i - 4].IndexOf(k)].GetComponent<NoteBehavior>().noteJudge = false;
+                    
+                }
+                else
+                {
+                    poolsOfNotes[i - 4][arr[i - 4].IndexOf(k)].GetComponent<NoteBehavior>().noteJudge = true;
+                    poolsOfNotes[i][arr[i].IndexOf(n)].GetComponent<NoteBehavior>().noteJudge = false;
+                }
+            }
         }
     }
 }
