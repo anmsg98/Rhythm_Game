@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     private Animator comboAnimator;
 
     public GameObject judgementUI;
-    private TMP_Text judgeText;
+    public TMP_Text judgeText;
     private string judge;
     private Animator judgementAnimator;
 

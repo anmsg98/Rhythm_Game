@@ -40,7 +40,7 @@ public class NoteController : MonoBehaviour
     private int divider;
     private float startingPoint;
     private float beatCount;
-    private float beatInterval;
+    public float beatInterval;
 
     private List<float> orderList = new List<float>();
     
@@ -67,6 +67,8 @@ public class NoteController : MonoBehaviour
 
         beatCount = (float) bpm / divider;
         beatInterval = 0.125f / beatCount;
+        
+        
 
         string line;
         int notetype;
@@ -170,7 +172,9 @@ public class NoteController : MonoBehaviour
         
         obj.GetComponent<NoteBehavior>().Initialize();
         obj.GetComponent<NoteBehavior>().notePrior = orderList[cnt];
+        obj.GetComponent<NoteBehavior>().longNoteOrder = note.longNote;
         obj.GetComponent<NoteBehavior>().noteTiming = note.noteTiming;
+        obj.GetComponent<NoteBehavior>().beatInterval = beatInterval;
         obj.SetActive(true);
         cnt += 1;
     }

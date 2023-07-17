@@ -14,18 +14,23 @@ public class NoteBehavior : MonoBehaviour
     // 노트 타입, 노트 처리 순서, 노트 판정 가능 여부
     public int noteType;
     public float notePrior = 0f;
-    public float noteTiming;
+    public int longNoteOrder;
     public bool noteJudge = false;
     private bool longPress = true;
     private bool enableBreak = true;
     private bool longClick = false;
 
     // 판정구역, 판정 세부조정
+    public float beatInterval;
+    public float noteTiming;
+    private float longNoteTiming;
     private float judgeSection;
     private float detailedJudgment;
     
+    
     // 판정(1~100%), 키입력
     public GameManager.judges judge;
+    public GameManager.judges longJudge; 
     private KeyCode keyCode;
 
   
@@ -36,6 +41,7 @@ public class NoteBehavior : MonoBehaviour
     void Start()
     {
         missJudge = GameObject.Find("Miss JudgeLine");
+        
         detailedJudgment = GameManager.instance.judgeTime * 0.001f * 44100f;
         if (noteType == 1 || noteType == 5) keyCode = KeyCode.D;
         if (noteType == 2 || noteType == 6)  keyCode = KeyCode.F;
@@ -49,6 +55,7 @@ public class NoteBehavior : MonoBehaviour
         if (!GameManager.instance.pause.activeInHierarchy)
         {
             judgeSection = Mathf.Abs(noteTiming - Convert.ToSingle(GameManager.instance.audioSource.timeSamples));
+            longNoteTiming = Mathf.Abs((noteTiming + (longNoteOrder * beatInterval * 44100f)) - Convert.ToSingle(GameManager.instance.audioSource.timeSamples));
             transform.Translate(Vector3.down * MusicSelect.instance.noteSpeed * Time.deltaTime);
             CheckJudgeMent();
         }
@@ -148,12 +155,13 @@ public class NoteBehavior : MonoBehaviour
                 {
                     if (judge != GameManager.judges.NONE && noteJudge && noteType > 4)
                     {
-                        GameManager.instance.ProcessJudge(judge);
+                        longJudge = judge;
+                        GameManager.instance.ProcessJudge(longJudge);
                     }
                     enableBreak = false;
                     longClick = true;
                 }
-                else if (Input.GetKey(keyCode) && longPress)
+                else if (longJudge != GameManager.judges.NONE && Input.GetKey(keyCode) && longPress)
                 {
                    longPress = false;
                    
@@ -161,12 +169,24 @@ public class NoteBehavior : MonoBehaviour
                    StartCoroutine("LongNote");
                 }
                 
-                else if (Input.GetKeyUp(keyCode) && noteJudge && longClick) 
+                else if (Input.GetKeyUp(keyCode) && noteJudge && longClick)
                 {
-                    gameObject.SetActive(false);
-                    enableBreak = true;
-                    noteJudge = false;
+                    if (longNoteTiming > detailedJudgment * 3f)
+                    {
+                        longJudge = GameManager.judges.Break;
+                        GameManager.instance.ProcessJudge(longJudge);
+                        GameManager.instance.ShowJudgementAnim();
+                        gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        GameManager.instance.ProcessJudge(longJudge);
+                        GameManager.instance.ShowJudgementAnim();
+                        gameObject.SetActive(false);
+                    }
                     longClick = false;
+                    noteJudge = false;
+                    Debug.Log(longNoteOrder + ", "+ longJudge + ", " + longNoteTiming);
                 }
 
                 if (judgeSection <= detailedJudgment * 3f)
@@ -239,6 +259,10 @@ public class NoteBehavior : MonoBehaviour
 
     public void Initialize()
     {
+        longPress = true;
+        longClick = false;
         judge = GameManager.judges.NONE;
+        enableBreak = true;
+        noteJudge = false;
     }
 }
