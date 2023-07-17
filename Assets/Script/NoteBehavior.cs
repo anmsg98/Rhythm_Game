@@ -164,9 +164,15 @@ public class NoteBehavior : MonoBehaviour
                 else if (longJudge != GameManager.judges.NONE && Input.GetKey(keyCode) && longPress)
                 {
                    longPress = false;
-                   
                    GameManager.instance.ShowJudgementAnim();
                    StartCoroutine("LongNote");
+                   if ((GameManager.instance.audioSource.timeSamples > (noteTiming + (longNoteOrder * beatInterval * 44100f))) && longNoteTiming > detailedJudgment * 3f)
+                   {
+                       longJudge = GameManager.judges.MAX1;
+                       GameManager.instance.ProcessJudge(longJudge);
+                       GameManager.instance.ShowJudgementAnim();
+                       gameObject.SetActive(false);
+                   }
                 }
                 
                 else if (Input.GetKeyUp(keyCode) && noteJudge && longClick)
