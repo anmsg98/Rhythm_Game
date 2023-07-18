@@ -156,10 +156,10 @@ public class NoteController : MonoBehaviour
             x = obj.transform.GetChild(0).gameObject.transform.position.x;
             z = obj.transform.GetChild(0).gameObject.transform.position.z;
             
-            obj.transform.GetChild(0).gameObject.transform.position = new Vector3(x, startY + (112.5f / bpm * note.longNote), z);
+            obj.transform.GetChild(0).gameObject.transform.position = new Vector3(x, startY + beatInterval * MusicSelect.instance.noteSpeed * note.longNote, z);
             obj.transform.GetChild(1).gameObject.transform.position = new Vector3(x, startY, z);
-            obj.transform.GetChild(2).gameObject.transform.position = new Vector3(x, startY + (112.5f / bpm * note.longNote) / 2, z);
-            obj.transform.GetChild(2).gameObject.transform.localScale = new Vector3(1.24f, (112.5f / bpm * note.longNote), 1);
+            obj.transform.GetChild(2).gameObject.transform.position = new Vector3(x, startY + (beatInterval * MusicSelect.instance.noteSpeed * note.longNote) / 2, z);
+            obj.transform.GetChild(2).gameObject.transform.localScale = new Vector3(1.24f, beatInterval * MusicSelect.instance.noteSpeed * note.longNote, 1);
         }
 
         else

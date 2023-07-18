@@ -58,6 +58,8 @@ public class GameManager : MonoBehaviour
     public int feverCount = 1;
     public float feverGauge;
 
+    public ParticleSystem[] keyBomb;
+
     public GameObject objectPooler;
     public enum judges
     {
@@ -548,16 +550,22 @@ public class GameManager : MonoBehaviour
                 if (pauseMenuIndex == 0)
                 {
                     playDataInitialize();
+                    audioSource.Stop();
+                    NoteBehavior.instance.Initialize();
                     SceneManager.LoadScene("GameScene");
                 }
                 else if (pauseMenuIndex == 1)
                 {
                     playDataInitialize();
+                    audioSource.Stop();
+                    NoteBehavior.instance.Initialize();
                     SceneManager.LoadScene("SelectScene");
                 }
                 else
                 {
                     playDataInitialize();
+                    audioSource.Stop();
+                    NoteBehavior.instance.Initialize();
                     SceneManager.LoadScene("TitleScene");
                 }
             }

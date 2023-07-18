@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3022311374046808481
 Transform:
   m_ObjectHideFlags: 0
@@ -301,6 +301,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noteType: 6
   notePrior: 0
-  noteTiming: 0
+  longNoteOrder: 0
   noteJudge: 0
+  beatInterval: 0
+  noteTiming: 0
   judge: 0
+  longJudge: 0

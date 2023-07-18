@@ -2,7 +2,7 @@ NoteSpeed 15.0
 fever 0
 fader 0
 chaos 0
-transparency 0
+transparency 30
 gearPosition -1
 rate 1
 noteTiming 0
