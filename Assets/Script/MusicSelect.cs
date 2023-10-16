@@ -16,17 +16,21 @@ public class MusicSelect : MonoBehaviour
     
     public static MusicSelect instance { get; set; }
     
+    // 곡(선택 여부, 개수) 리스트
     private List<string> musicList;
     private int currentMusic;
     private int countMusic;
     
+    // 화면 전환
     private Color fadeInColor;
     private bool enableStartFadeIn;
     public int fadeTime;
     
+    // UI 애니메이션 
     public Animator musicInfoAnim;
     public Animator optionBoxAnim;
     
+    // 음악 소스(뮤직 비디오, 곡 정보, 이미지)
     public GameObject Music;
     public VideoPlayer videoSource;
     private float videoVolume = 0.5f;
@@ -34,9 +38,9 @@ public class MusicSelect : MonoBehaviour
     public SpriteRenderer coverImage;
     public Image fadeIn;
 
+    // 메뉴 및 옵션 관련 UI
     public GameObject MenuUi;
     public GameObject optionBlur;
-    
     public AudioSource optionSound;
     public SpriteRenderer[] optionSprite;
     public GameObject[] optionText;
@@ -55,6 +59,7 @@ public class MusicSelect : MonoBehaviour
     public int judgeTiming;
     public Scrollbar judgeTimingScroll;
 
+    // 종료 UI
     public GameObject QuitUI;
     private bool enableQuitFadeIn;
 

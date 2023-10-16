@@ -51,14 +51,18 @@ public class NoteController : MonoBehaviour
         lists.Add(1); lists.Add(2); lists.Add(3); lists.Add(4);
         RandomNote(lists);
         
+        // 오브젝트 풀러를 이용한 노트 생성
         noteObjectPooler = gameObject.GetComponent<ObjectPooler>();
         startY = MusicSelect.instance.noteSpeed * 2.6f - 1.675f;
         TextAsset textAsset = Resources.Load<TextAsset>("Beats/" + PlayData.music);
         StringReader reader = new StringReader(textAsset.text);
+        
         // 곡제목
         Title = reader.ReadLine();
+        
         // 아티스트 정보
         PlayData.Artist = reader.ReadLine();
+        
         // bpm 정보
         string beatInformation = reader.ReadLine();
         bpm = Convert.ToInt32(beatInformation.Split(' ')[0]);
@@ -68,8 +72,6 @@ public class NoteController : MonoBehaviour
         beatCount = (float) bpm / divider;
         beatInterval = 0.125f / beatCount;
         
-        
-
         string line;
         int notetype;
         int longNote;
@@ -150,7 +152,8 @@ public class NoteController : MonoBehaviour
     void MaKeNote(Note note)
     {
         GameObject obj = noteObjectPooler.getObject(note.noteType);
-
+        
+        // 롱노트
         if (note.noteType > 4)
         {
             x = obj.transform.GetChild(0).gameObject.transform.position.x;
@@ -161,15 +164,16 @@ public class NoteController : MonoBehaviour
             obj.transform.GetChild(2).gameObject.transform.position = new Vector3(x, startY + (beatInterval * MusicSelect.instance.noteSpeed * note.longNote) / 2, z);
             obj.transform.GetChild(2).gameObject.transform.localScale = new Vector3(1.24f, beatInterval * MusicSelect.instance.noteSpeed * note.longNote, 1);
         }
-
+        
+        // 단노트
         else
         {
             x = obj.transform.position.x;
             z = obj.transform.position.z;
-
             obj.transform.position = new Vector3(x, startY, z);
         }
         
+        // 노트의 변수값을 초기화
         obj.GetComponent<NoteBehavior>().Initialize();
         obj.GetComponent<NoteBehavior>().notePrior = orderList[cnt];
         obj.GetComponent<NoteBehavior>().longNoteOrder = note.longNote;

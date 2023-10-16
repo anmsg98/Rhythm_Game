@@ -157,6 +157,7 @@ public class NoteBehavior : MonoBehaviour
     {
         if (Input.GetKeyDown(keyCode))
                 {
+                    // 키보드 입력시 조건 변수 값 부여 
                     if (judge != GameManager.judges.NONE && noteJudge)
                     {
                         longJudge = judge;
@@ -166,6 +167,7 @@ public class NoteBehavior : MonoBehaviour
                         KeyBomb();
                     }
                 }
+                // 롱노트 처리
                 else if (longJudge != GameManager.judges.NONE && Input.GetKey(keyCode) && longPress)
                 {
                     if ((GameManager.instance.audioSource.timeSamples >
@@ -182,7 +184,7 @@ public class NoteBehavior : MonoBehaviour
                     GameManager.instance.ShowJudgementAnim();
                     StartCoroutine("LongNote");
                 }
-
+                // 롱노트 처리 중간에 떼었을 때
                 else if (Input.GetKeyUp(keyCode) && noteJudge && longClick)
                 {
                     if (longNoteTiming > detailedJudgment * 3f)

@@ -12,13 +12,16 @@ public class ObjectPooler : MonoBehaviour
     private List<List<GameObject>> poolsOfNotes;
     public int noteCount;
     private bool more = true;
+    private const int Max = 9999;
     
     void Start()
     {
         poolsOfNotes = new List<List<GameObject>>();
+        // 노트의 종류(1,2,3,4)
         for (int i = 0; i < Notes.Count; i++)
         {
             poolsOfNotes.Add(new List<GameObject>());
+            // 열마다 노트의 개수
             for (int j = 0; j < noteCount; j++)
             {
                 GameObject obj;
@@ -58,13 +61,12 @@ public class ObjectPooler : MonoBehaviour
 
         return null;
     }
-
-    
     
     void Update()
     {
         CheckNotePrior();
     }
+    
     public void CheckNotePrior()
     {
         List<List<int>> arr = new List<List<int>>();
@@ -75,7 +77,7 @@ public class ObjectPooler : MonoBehaviour
             for (int j = 0; j < noteCount; j++)
             {
                 if (!poolsOfNotes[i][j].activeInHierarchy)
-                    arr[i].Add(9999);
+                    arr[i].Add(Max);
                 else
                 {
                     arr[i].Add((int)poolsOfNotes[i][j].GetComponent<NoteBehavior>().notePrior);
